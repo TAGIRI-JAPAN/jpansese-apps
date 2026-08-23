@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JLPT N4/N5 Ultimate Reading 60 Questions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+Sinhala:wght@400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', 'Noto Sans JP', 'Noto Sans Sinhala', sans-serif;
+            background-color: #f0fdf4;
+            color: #334155;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .app-header {
+            background: linear-gradient(135deg, #4f46e5, #059669);
+            color: white;
+            padding: 22px 15px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .app-header h1 { margin: 0; font-size: 24px; letter-spacing: 1px; }
+        .app-header p { margin: 5px 0 0; opacity: 0.95; font-size: 14px; }
+        
+        .category-nav {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            background: #ffffff;
+            padding: 12px;
+            border-bottom: 2px solid #e2e8f0;
+            position: sticky;
+            top: 88px;
+            z-index: 999;
+            flex-wrap: wrap;
+        }
+        .cat-btn {
+            background: #f1f5f9;
+            border: 2px solid #cbd5e1;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #475569;
+            transition: all 0.2s;
+            font-family: inherit;
+            font-size: 13.5px;
+        }
+        .cat-btn:hover, .cat-btn.active {
+            background: #4f46e5;
+            color: white;
+            border-color: #4f46e5;
+        }
+        
+        .main-container {
+            max-width: 920px;
+            margin: 20px auto;
+            padding: 0 15px 40px 15px;
+        }
+        
+        .jump-grid-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            border: 1px solid #e2e8f0;
+        }
+        .jump-grid-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .score-badge {
+            background: #ecfdf5;
+            color: #047857;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            border: 1px solid #a7f3d0;
+        }
+        .jump-buttons {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 6px;
+        }
+        @media (max-width: 600px) {
+            .jump-buttons { grid-template-columns: repeat(6, 1fr); }
+        }
+        .jump-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 7px 0;
+            text-align: center;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            color: #334155;
+            transition: all 0.2s;
+        }
+        .jump-btn:hover { background: #e0e7ff; color: #4f46e5; }
+        .jump-btn.correct { background: #10b981 !important; color: white !important; border-color: #059669 !important; }
+        .jump-btn.wrong { background: #ef4444 !important; color: white !important; border-color: #dc2626 !important; }
+        
+        .question-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .question-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .q-badge {
+            background: #4f46e5;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .cat-tag {
+            font-size: 12px;
+            color: #059669;
+            background: #ecfdf5;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+        
+        .passage-box {
+            background: #f8fafc;
+            border-left: 5px solid #4f46e5;
+            padding: 18px;
+            border-radius: 6px;
+            font-size: 16px;
+            color: #1e293b;
+            margin-bottom: 15px;
+        }
+        
+        ruby { ruby-align: center; }
+        rt { font-size: 10px; color: #64748b; font-weight: 400; }
+        
+        .vocab-box {
+            background: #faf5ff;
+            border: 1px solid #e9d5ff;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13.5px;
+        }
+        .vocab-box h5 { margin: 0 0 6px 0; color: #7e22ce; font-size: 14px; }
+        .vocab-box ul { margin: 0; padding-left: 18px; color: #581c87; }
+        .vocab-box li { margin-bottom: 4px; }
+        
+        .q-text {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #0f172a;
+        }
+        
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 15px 0;
+        }
+        .options-list li {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            padding: 12px 18px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .options-list li:hover {
+            border-color: #a5b4fc;
+            background: #f0fdf4;
+        }
+        
+        .expl-btn {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+        }
+        .expl-btn:hover { background: #e2e8f0; }
+        
+        .expl-box {
+            display: none;
+            margin-top: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #ffffff;
+        }
+        .expl-box.active { display: block; animation: fadeIn 0.3s; }
+        
+        .lang-tabs {
+            display: flex;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: none;
+            font-weight: 600;
+            cursor: pointer;
+            color: #64748b;
+            font-family: inherit;
+            font-size: 13px;
+        }
+        .tab-btn.active {
+            color: #4f46e5;
+            border-bottom: 3px solid #4f46e5;
+            background: white;
+        }
+        .tab-content { display: none; padding: 15px; font-size: 14px; line-height: 1.6; }
+        .tab-content.active { display: block; }
+        
+        .tip-card {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            padding: 12px 15px;
+            border-radius: 8px;
+            color: #92400e;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-header">
+    <h1>🇯🇵 JLPT N4/N5 Ultimate Master (60 Questions)</h1>
+    <p>Interactive Practice with Category Navigation & Explanations</p>
+</div>
+
+<div class="category-nav">
+    <button class="cat-btn active" onclick="filterCategory('all', event)">全問 (All 60)</button>
+    <button class="cat-btn" onclick="filterCategory('short', event)">パターン1: 短文 (Q1-20)</button>
+    <button class="cat-btn" onclick="filterCategory('medium', event)">パターン2: 中文 (Q21-40)</button>
+    <button class="cat-btn" onclick="filterCategory('info', event)">パターン3: 情報検索 (Q41-60)</button>
+</div>
+
+<div class="main-container">
+    <div class="jump-grid-card">
+        <div class="jump-grid-title">
+            <span>🚀 クイックナビゲーション（問題ジャンプ）</span>
+            <span class="score-badge" id="score-counter">正解数: 0 / 60</span>
+        </div>
+        <div class="jump-buttons" id="jump-buttons-container"></div>
+    </div>
+
+    <div id="questions-wrapper"></div>
+</div>
+
+<script>
+    const questionsData = [{"id": 1, "category": "short", "category_name": "短文 (Short Passage)", "passage": "<ruby>学生時代<rt>がくせいじだい</rt></ruby>は<ruby>東京<rt>とうきょう</rt></ruby>に<ruby>住<rt>す</rt></ruby>んでいました。<ruby>人<rt>ひと</rt></ruby>が<ruby>多<rt>おお</rt></ruby>くて、<ruby>電車<rt>でんしゃ</rt></ruby>もいつも<ruby>込<rt>こ</rt></ruby>んでいました。でも、<ruby>遊<rt>あそ</rt></ruby>ぶところが<ruby>多<rt>おお</rt></ruby>くて、とてもおもしろかったです。<br><br><ruby>今<rt>いま</rt></ruby>は、<ruby>北海道<rt>ほっかいどう</rt></ruby>の<ruby>小<rt>ちい</rt></ruby>さな<ruby>町<rt>まち</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>いています。<ruby>冬<rt>ふゆ</rt></ruby>は<ruby>雪<rt>ゆき</rt></ruby>がたくさん<ruby>降<rt>ふ</rt></ruby>って<ruby>寒<rt>さむ</rt></ruby>いです。でも、<ruby>自然<rt>しぜん</rt></ruby>がきれいで、<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>もおいしいです。<ruby>来年<rt>らいねん</rt></ruby>、<ruby>東京<rt>とうきょう</rt></ruby>から<ruby>友<rt>とも</rt></ruby>だちが<ruby>遊<rt>あそ</rt></ruby>びに<ruby>来<rt>き</rt></ruby>ます。<ruby>友<rt>とも</rt></ruby>だちはスキーが<ruby>好<rt>す</rt></ruby>きですから、<ruby>一緒<rt>いっしょ</rt></ruby>に<ruby>山<rt>やま</rt></ruby>へ<ruby>行<rt>い</rt></ruby>くつもりです。", "vocab": [{"word": "込む (こむ)", "en": "to get crowded", "si": "තදබද වෙනවා"}, {"word": "自然 (しぜん)", "en": "nature", "si": "ස්වභාවධර්මය"}], "question": "<ruby>私<rt>わたし</rt></ruby>は、<ruby>今<rt>いま</rt></ruby>どうして<ruby>北海道<rt>ほっかいどう</rt></ruby>に<ruby>住<rt>す</rt></ruby>んでいますか。", "options": ["1. <ruby>雪<rt>ゆき</rt></ruby>が<ruby>好<rt>す</rt></ruby>きだからです。", "2. <ruby>北海道<rt>ほっかいどう</rt></ruby>で<ruby>仕事<rt>しごと</rt></ruby>をしているからです。", "3. <ruby>東京<rt>とうきょう</rt></ruby>の<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>込<rt>こ</rt></ruby>んでいたからです。", "4. <ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>がおいしいからです。"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Paraphrasing!</strong><br>'働いています' (working) is rephrased as '仕事をしている' (doing work) in option 2.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: සමාන අර්ථ ඇති වචන!</strong><br>'働いています' (වැඩ කරනවා) යන්න 2 වන පිළිතුරේ '仕事をしている' (රැකියාවක් කරනවා) ලෙස වෙනස් කර ඇත."}, {"id": 2, "category": "short", "category_name": "短文 (Short Passage)", "passage": "フリーマーケットを<ruby>知<rt>し</rt></ruby>っていますか。フリーマーケットは<ruby>公園<rt>こうえん</rt></ruby>などで、いろいろな<ruby>人<rt>ひと</rt></ruby>が<ruby>開<rt>ひら</rt></ruby>くお<ruby>店<rt>みせ</rt></ruby>です。<ruby>子<rt>こ</rt></ruby>どもの<ruby>服<rt>ふく</rt></ruby>は、<ruby>今年<rt>ことし</rt></ruby><ruby>着<rt>き</rt></ruby>た<ruby>服<rt>ふく</rt></ruby>でも<ruby>来年<rt>らいねん</rt></ruby><ruby>着<rt>き</rt></ruby>ません。だから<ruby>売<rt>う</rt></ruby>る<ruby>人<rt>ひと</rt></ruby>がたくさんいます。<br><br><ruby>私<rt>わたし</rt></ruby>もときどきお<ruby>店<rt>みせ</rt></ruby>を<ruby>出<rt>だ</rt></ruby>します。<ruby>着<rt>き</rt></ruby>ない<ruby>服<rt>ふく</rt></ruby>などをすてるのが<ruby>好<rt>す</rt></ruby>きではないので、フリーマーケットはとてもいいと<ruby>思<rt>おも</rt></ruby>います。", "vocab": [{"word": "フリーマーケット", "en": "flea market", "si": "මැක්කන්ගේ වෙළඳපොළ"}, {"word": "すてる", "en": "to throw away", "si": "විසි කරනවා"}], "question": "「<ruby>私<rt>わたし</rt></ruby>」はどうしてフリーマーケットでお<ruby>店<rt>みせ</rt></ruby>を<ruby>出<rt>だ</rt></ruby>しますか。", "options": ["1. フリーマーケットは<ruby>安<rt>やす</rt></ruby>いからです。", "2. あまりお<ruby>金<rt>かね</rt></ruby>がないからです。", "3. <ruby>使<rt>つか</rt></ruby>わないものをすてるのがきらいだからです。", "4. きれいな<ruby>服<rt>ふく</rt></ruby>がたくさんあるからです。"], "correct": 2, "tip_en": "<strong>Teacher's Tip: Negative match!</strong><br>'すてるのが好きではない' matches 'すてるのがきらい' in option 3.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: සෘණාත්මක අර්ථ!</strong><br>'すてるのが好きではない' (අයින් කිරීමට නොකැමතියි) යන්න 3 වන පිළිතුරේ 'すてるのがきらい' ට සමාන වේ."}, {"id": 3, "category": "short", "category_name": "短文 (Short Passage)", "passage": "<ruby>私<rt>わたし</rt></ruby>の<ruby>家<rt>いえ</rt></ruby>の<ruby>庭<rt>にわ</rt></ruby>に、<ruby>赤<rt>あか</rt></ruby>い<ruby>実<rt>み</rt></ruby>をつける<ruby>木<rt>き</rt></ruby>があります。きれいな<ruby>色<rt>いろ</rt></ruby>ですが、<ruby>鳥<rt>とり</rt></ruby>は<ruby>食<rt>た</rt></ruby>べません。だから、たぶんおいしくありません。<br><br><ruby>先週<rt>せんしゅう</rt></ruby>、<ruby>友<rt>とも</rt></ruby>だちが<ruby>来<rt>き</rt></ruby>たとき、<ruby>実<rt>み</rt></ruby>を<ruby>食<rt>た</rt></ruby>べました。「おいしいよ。」<ruby>私<rt>わたし</rt></ruby>はおどろいて一つ<ruby>食<rt>た</rt></ruby>べました。甘くておいしかったです。", "vocab": [{"word": "実をつける", "en": "to bear fruit", "si": "ගෙඩි හටගන්නවා"}, {"word": "おどろく", "en": "to be surprised", "si": "පුදුම වෙනවා"}], "question": "どうして「たぶん、その<ruby>実<rt>み</rt></ruby>はおいしくありません」と<ruby>思<rt>おも</rt></ruby>いましたか。", "options": ["1. 自分<ruby>が<rt></rt></ruby><ruby>食<rt>た</rt></ruby>べてまずかったからです。", "2. 友達がまずいと言ったからです。", "3. その<ruby>実<rt>み</rt></ruby>を<ruby>鳥<rt>とり</rt></ruby>が<ruby>食<rt>た</rt></ruby>べないからです。", "4. 赤い色はまずい色だからです。"], "correct": 2, "tip_en": "<strong>Teacher's Tip: Reason Connector!</strong><br>'鳥は食べません。だから、たぶん...' Shows birds not eating is the reason (Option 3).", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: හේතුව!</strong><br>'鳥は食べません。だから' කුරුල්ලන් නොකෑම හේතුව බව ပෙන්වයි."}, {"id": 4, "category": "short", "category_name": "短文 (Short Passage)", "passage": "<ruby>今日<rt>きょう</rt></ruby>は<ruby>朝<rt>あさ</rt></ruby><ruby>寒<rt>さむ</rt></ruby>かったから、セーターを2<ruby>枚<rt>まい</rt></ruby><ruby>着<rt>き</rt></ruby>て<ruby>出<rt>で</rt></ruby>かけました。<ruby>午後<rt>ごご</rt></ruby>とてもあつくなったので、<ruby>映画館<rt>えいがかん</rt></ruby>でセーターをぬぎました。<ruby>帰<rt>かえ</rt></ruby>るときセーターをわすれて<ruby>帰<rt>かえ</rt></ruby>りました。<ruby>母<rt>はは</rt></ruby>にもらったものだから、とてもざんねんです。<ruby>明日<rt>あした</rt></ruby>からは<ruby>天気予報<rt>てんきよほう</rt></ruby>を見てから<ruby>出<rt>で</rt></ruby>かけます。", "vocab": [{"word": "ぬぐ", "en": "to take off clothes", "si": "ඇඳුම් ගලවනවා"}, {"word": "ざんねん", "en": "regretful / pity", "si": "කණගාටුදායකයි"}], "question": "<ruby>今日<rt>きょう</rt></ruby>「<ruby>私<rt>わたし</rt></ruby>」がしなかったのは<ruby>何<rt>なん</rt></ruby>ですか。", "options": ["1. 映画を見ること", "2. セーターをぬぐこと", "3. 映画館に電話すること", "4. 天気予報を見ること"], "correct": 3, "tip_en": "<strong>Teacher's Tip: Time marker!</strong><br>'明日からは天気予報を見て...' means weather was NOT checked today (Option 4).", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: කාලය!</strong><br>'明日からは...' (හෙට සිට) කී බැවින් අද කාලගුණය බලා නැත."}, {"id": 5, "category": "short", "category_name": "短文 (Short Passage)", "passage": "<ruby>私<rt>わたし</rt></ruby>はしごとで、<ruby>日本<rt>にほん</rt></ruby>のあちらこちらに<ruby>行<rt>い</rt></ruby>きます。<ruby>行<rt>い</rt></ruby>った<ruby>町<rt>まち</rt></ruby>のおいしいものを<ruby>食<rt>た</rt></ruby>べたいですが、ゆうめいなものは<ruby>高<rt>たか</rt></ruby>いです。ラーメンはどうでしょう。あまり<ruby>高<rt>たか</rt></ruby>くありません。そして、ラーメンのお<ruby>店<rt>みせ</rt></ruby>はどこにでもあります。だから、いつもラーメンを<ruby>食<rt>た</rt></ruby>べます。", "vocab": [{"word": "あちらこちら", "en": "here and there", "si": "සෑම තැනම"}], "question": "「<ruby>私<rt>わたし</rt></ruby>」は、どうしてラーメンを<ruby>食<rt>た</rt></ruby>べますか。", "options": ["1. ラーメンが好きだからです。", "2. ラーメンを勉強したいからです。", "3. 安くて どの町にもあるからです。", "4. 有名なお店が多いからです。"], "correct": 2, "tip_en": "<strong>Teacher's Tip: Combining sentences!</strong><br>'あまり高くありません' + 'どこにでもあります' = 安くて どの町にもある (Option 3).", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: කරුණු එකතු කිරීම!</strong><br>'あまり高くありません' + 'どこにでもあります' = 3 වන පිළිතුර."}, {"id": 6, "category": "short", "category_name": "短文 (Short Passage)", "passage": "<ruby>私<rt>わたし</rt></ruby>は、きょうだいが推進いません。でも、いとこがいます。<ruby>母<rt>はは</rt></ruby>の<ruby>妹<rt>いもうと</rt></ruby>の<ruby>子<rt>こ</rt></ruby>どもです。いとこと<ruby>一<rt>いっ</rt></ruby>しょにいると、<ruby>知<rt>し</rt></ruby>らない<ruby>人<rt>ひと</rt></ruby>はよく「きょうだいですね」と<ruby>言<rt>い</rt></ruby>います。<ruby>母<rt>はは</rt></ruby>とおばは<ruby>顔<rt>かお</rt></ruby>がちがいますが、<ruby>私<rt>わたし</rt></ruby>といとこはにています。それは、おもしろいです。", "vocab": [{"word": "いとこ", "en": "cousin", "si": "කසින් සහෝදරයා/සහෝදරිය"}, {"word": "にている", "en": "resemble / look like", "si": "එක වගේ / සමානයි"}], "question": "<ruby>何<rt>なに</rt></ruby>がおもしろいですか。", "options": ["1. 自分にはきょうだいがいないこと", "2. 母とおばは似ていないが、自分といとこは似ていること", "3. いとこがおばに似ていること", "4. 自分がおばに似ていること"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Reference Pronouns!</strong><br>'それ' refers to the contrast in the previous sentence: Mother & aunt look different, but narrator & cousin look alike.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: 'それ' පදය!</strong><br>කලින් වාක්‍යයේ කී දෙය: අම්මා සහ නැන්දා වෙනස් වුවත්, මම සහ කසින් එක වගේ වීම."}, {"id": 7, "category": "short", "category_name": "短文 (Short Passage)", "passage": "<ruby>私<rt>わたし</rt></ruby>は<ruby>水曜日<rt>すいようび</rt></ruby>に「<ruby>英語<rt>えいご</rt></ruby>で<ruby>話<rt>はな</rt></ruby>す<ruby>会<rt>かい</rt></ruby>」に<ruby>行<rt>い</rt></ruby>っています。日本人と外国人が10人くらいいますが、先生はいません。<ruby>会<rt>かい</rt></ruby>のみなさんは英語がじょうずですが、もっとじょうずになりたいと言います。みんなで英語を使って話します。学校で勉強するより楽しいです。", "vocab": [{"word": "会 (かい)", "en": "club / meeting", "si": "සමිතිය / රස්වීම"}], "question": "この<ruby>会<rt>かい</rt></ruby>にどんな<ruby>人<rt>ひと</rt></ruby>が<ruby>来<rt>き</rt></ruby>ていますか。", "options": ["1. 英語の先生になりたい人", "2. 英語がもっとじょうずになりたい人", "3. 英語が下手な人", "4. 学校に行きたくない人"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Exact Match!</strong><br>'もっとじょうずになりたいと言います' directly leads to option 2.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: කෙලින්ම ඇති වාක්‍ය!</strong><br>'もっとじょうずになりたい' යන්නෙන් 2 වන පිළිතුර තහවුරු වේ."}, {"id": 8, "category": "short", "category_name": "短文 (Short Passage)", "passage": "<ruby>昨日<rt>きのう</rt></ruby>、デパートで<ruby>小<rt>ちい</rt></ruby>さい<ruby>かばん<rt>カバン</rt></ruby>を<ruby>買<rt>か</rt></ruby>いました。黒くて軽いかばんです。<ruby>明日<rt>あした</rt></ruby>から<ruby>旅行<rt>りょこう</rt></ruby>に<ruby>行<rt>い</rt></ruby>くので、そのときに<ruby>使<rt>つか</rt></ruby>うつもりです。<ruby>大<rt>おお</rt></ruby>きいかばんはもう持っていますが、重いのであまり<ruby>使<rt>つか</rt></ruby>いたくありませんでした。", "vocab": [{"word": "軽い (かるい)", "en": "lightweight", "si": "බර අඩු"}, {"word": "重い (おもい)", "en": "heavy", "si": "බර"}], "question": "どうして 新しいかばんを<ruby>買<rt>か</rt></ruby>いましたか。", "options": ["1. 黒いかばんがなかったから", "2. 持っているかばんが重いから", "3. 安かったから", "4. 大きいかばんが必要だから"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Contrast!</strong><br>'大きいかばんは重いので...' shows why a new lighter bag was bought (Option 2).", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: විරුද්ධ පද!</strong><br>'大きいかばんは重いので' ලොකු බෑගය බර නිසා නව සැහැල්ලු බෑගයක් ගත්තේය."}, {"id": 9, "category": "short", "category_name": "短文 (Short Passage)", "passage": "<ruby>毎朝<rt>まいあさ</rt></ruby>、7<ruby>時<rt>じ</rt></ruby>に起きて<ruby>散歩<rt>さんぽ</rt></ruby>をします。<ruby>公園<rt>こうえん</rt></ruby>には<ruby>花<rt>はな</rt></ruby>がたくさんあってきれいです。<ruby>雨<rt>あめ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>は<ruby>散歩<rt>さんぽ</rt></ruby>に行きませんが、家で<ruby>本<rt>ほん</rt></ruby>を読みます。<ruby>私<rt>わたし</rt></ruby>は<ruby>晴れ<rt>はれ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>も<ruby>雨<rt>あめ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>も 朝の時間が<ruby>好<rt>す</rt></ruby>きです。", "vocab": [{"word": "散歩 (さんぽ)", "en": "walk", "si": "ඇවිදීම"}], "question": "<ruby>雨<rt>あめ</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>、この人は 朝 <ruby>何<rt>なに</rt></ruby>をしますか。", "options": ["1. 公園で花を見る", "2. 7時まで寝る", "3. 家で本を読む", "4. 公園を散歩する"], "correct": 2, "tip_en": "<strong>Teacher's Tip: Conditional trigger!</strong><br>'雨の日は...家で本を読みます' gives Option 3.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: කොන්දේසි!</strong><br>'雨の日は...家で本を読みます' කියා කෙලින්ම ඇත."}, {"id": 10, "category": "short", "category_name": "短文 (Short Passage)", "passage": "<ruby>隣<rt>となり</rt></ruby>の<ruby>部屋<rt>へや</rt></ruby>に<ruby>新<rt>あたら</rt></ruby>しい人が引っこしてきました。インドネシアから来た留学生です。日本語がとても上手で、昨日は一緒に<ruby>晩<rt>ばん</rt></ruby>ごはんを食べました。インドネシアの料理は少し辛かったですが、とてもおいしかったです。", "vocab": [{"word": "引っこす", "en": "to move in", "si": "පදිංචියට එනවා"}, {"word": "辛い (からい)", "en": "spicy", "si": "සැර"}], "question": "<ruby>隣<rt>となり</rt></ruby>の部屋の人について、正しいものはどれですか。", "options": ["1. 日本語が話せない", "2. 昨日日本に来た", "3. インドネシア料理を作ってくれた", "4. 辛い料理が嫌い"], "correct": 2, "tip_en": "<strong>Teacher's Tip: Inferring details!</strong><br>'昨日は一緒に晩ごはんを食べました。インドネシアの料理は...' means the roommate cooked Indonesian food (Option 3).", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: සිදුවීම අනුමාන කිරීම!</strong><br>ඉන්දුනීසියානු කෑම එකට කෑ බැවින් අලුත් ශිෂ්‍යයා කෑම සාදා දී ඇත."}, {"id": 11, "category": "short", "category_name": "短文 (Short Passage)", "passage": "<ruby>私<rt>わたし</rt></ruby>は<ruby>大学<rt>だいがく</rt></ruby>まで<ruby>電車<rt>でんしゃ</rt></ruby>で1<ruby>時間<rt>じかん</rt></ruby>かけて通っています。でも、<ruby>朝<rt>あさ</rt></ruby>の電車はとても込んでいて疲れます。だから、<ruby>来月<rt>らいげつ</rt></ruby>から<ruby>大学<rt>だいがく</rt></ruby>の近くのアパートに<ruby>引っ越<rt>ひっこ</rt></ruby>すことにしました。自転車で10分で行けるので楽しみです。", "vocab": [{"word": "通う (かよう)", "en": "to commute", "si": "ගමනාගමනය කරනවා"}, {"word": "疲れる (つかれる)", "en": "to get tired", "si": "වහෙස වෙනවා"}], "question": "この人は どうして アパートに 引っ越しますか。", "options": ["1. 電車代が高いから", "2. 朝の電車が込んでいて疲れるから", "3. 自転車を買ったから", "4. 大学が遠くなったから"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Find 'だから'!</strong><br>'朝の電車はとても込んでいて疲れます。だから...' directly links fatigue/crowding to moving (Option 2).", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: 'だから' පදය!</strong><br>'疲れます。だから...' යන්නෙන් වෙහෙස වීම පදිංචිය වෙනස් කිරීමට හේතුව බව පෙන්වයි."}, {"id": 12, "category": "short", "category_name": "短文 (Short Passage)", "passage": "<ruby>会社<rt>かいしゃ</rt></ruby>の近くに 新しいレストランができました。安くておいしいと評判なので、昨日 <ruby>同僚<rt>どうりょう</rt></ruby>と一緒に行きました。ランチセットは800円で、スープとサラダもついていました。とても満足したので、また来週も行きたいです。", "vocab": [{"word": "評判 (ひょうばん)", "en": "reputation / popular", "si": "ප්‍රසිද්ධිය / කීර්තිය"}, {"word": "満足 (まんぞく)", "en": "satisfied", "si": "තෘප්තිමත්"}], "question": "この人は レストランについて どう思いましたか。", "options": ["1. 高かったが おいしかった", "2. 安くて スープもついていて 満足した", "3. 混んでいたので もう行きたくない", "4. 同僚が払ってくれたので よかった"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Keyword '満足'!</strong><br>The narrator was satisfied with the 800 yen set including soup and salad (Option 2).", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: '満足' වචනය!</strong><br>800円 සෙට් එකට සූප් සහ සලද තිබූ නිසා තෘප්තිමත් විය."}, {"id": 13, "category": "short", "category_name": "短文 (Short Passage)", "passage": "<ruby>私<rt>わたし</rt></ruby>は<ruby>先月<rt>せんげつ</rt></ruby>からギターを習い始めました。<ruby>子供<rt>こども</rt></ruby>のころから 音楽が好きでしたが、楽器を弾くのは初めてです。<ruby>毎日<rt>まいにち</rt></ruby>仕事が終わってから、家で30分練習しています。少しずつ上手になって、好きな曲が弾けるようになって嬉しいです。", "vocab": [{"word": "習う (ならう)", "en": "to learn", "si": "ඉගෙන ගන්නවා"}, {"word": "弾く (ひく)", "en": "to play guitar/piano", "si": "වාදනය කරනවා"}], "question": "この人について、正しいものはどれですか。", "options": ["1. 子供のときから ギターを弾いていた", "2. 毎日 会社で ギターを練習している", "3. 先月から ギターを習い始めた", "4. まだ 好きな曲が 弾けない"], "correct": 2, "tip_en": "<strong>Teacher's Tip: Check start date!</strong><br>'先月からギターを習い始めました' directly matches Option 3.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: ආරම්භ කළ දිනය!</strong><br>'先月から...' (පසුගිය මාසයේ සිට) කියා කෙලින්ම ඇත."}, {"id": 14, "category": "short", "category_name": "短文 (Short Passage)", "passage": "<ruby>図書館<rt>としょかん</rt></ruby>は<ruby>月曜日<rt>げつようび</rt></ruby>が休みです。でも、<ruby>月曜日<rt>げつようび</rt></ruby>が<ruby>祝日<rt>しゅくじつ</rt></ruby>のときは開いています。そのかわり、<ruby>火曜日<rt>かようび</rt></ruby>が休みになります。<ruby>私<rt>わたし</rt></ruby>は毎週 <ruby>本<rt>ほん</rt></ruby>を借りに行きますが、今週の月曜日は祝日だったので、火曜日に行きました。", "vocab": [{"word": "祝日 (しゅくじつ)", "en": "national holiday", "si": "ජාතික නිවාඩු දිනය"}, {"word": "そのかわり", "en": "instead", "si": "ඊට වෙනුවට"}], "question": "今週、図書館は いつ 休みでしたか。", "options": ["1. 月曜日", "2. 火曜日", "3. 水曜日", "4. 休みはなかった"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Exception Switch!</strong><br>Monday was a holiday -> Tuesday became closed day instead (Option 2).", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: ව්‍යතිරේක නීතිය!</strong><br>සඳුදා නිවාඩු දිනයක් වූ බැවින් අඟහරුවාදා වසා තබන ලදී."}, {"id": 15, "category": "short", "category_name": "短文 (Short Passage)", "passage": "<ruby>昨日<rt>きのう</rt></ruby>の夕方、飼っている猫がいなくなりました。<ruby>家族<rt>かぞく</rt></ruby>で近くの公園や道路を探しましたが見つかりませんでした。<ruby>夜<rt>よる</rt></ruby>になってあきらめて家に入ろうとしたとき、玄関の横で眠っている猫を見つけました。無事で安心しました。", "vocab": [{"word": "探す (さがす)", "en": "to look for", "si": "සොයනවා"}, {"word": "無事 (ぶじ)", "en": "safe and sound", "si": "ආරක්ෂිතව"}], "question": "猫は どこに いましたか。", "options": ["1. 公園の 中", "2. 道路の 上", "3. 玄関の 横", "4. 家の 部屋の中"], "correct": 2, "tip_en": "<strong>Teacher's Tip: Exact Location Scan!</strong><br>'玄関の横で眠っている猫を見つけました' matches Option 3.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: ස්ථානය සොයන්න!</strong><br>'玄関の横' (ඉදිරිපස දොර අසල) කියා කෙලින්ම ඇත."}, {"id": 16, "category": "short", "category_name": "短文 (Short Passage)", "passage": "<ruby>来週<rt>らいしゅう</rt></ruby>は母の誕生日です。<ruby>私<rt>わたし</rt></ruby>は赤いスカーフをプレゼントしようと思っています。<ruby>母<rt>はは</rt></ruby>はよく散歩をするので、寒い日に使ってほしいです。<ruby>昨日<rt>きのう</rt></ruby>デパートで綺麗なスカーフを見つけたので、明日買いに行きます。", "vocab": [{"word": "誕生日 (たんじょうび)", "en": "birthday", "si": "උපන් දිනය"}, {"word": "スカーフ", "en": "scarf", "si": "ස්කාෆ් එක"}], "question": "この人は どうして スカーフを選びましたか。", "options": ["1. 母が スカーフを欲しがっていたから", "2. 母が よく散歩をして 寒い日に使ってほしいから", "3. 安く 買えたから", "4. 母の 好きな色が 黒だから"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Intent Marker '〜てほしい'!</strong><br>'母はよく散歩をするので、寒い日に使ってほしい' gives Option 2.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: '〜てほしい' (අපේක්ෂාව)!</strong><br>අම්මා ඇවිදින්න යන නිසා සීතල දිනවල පාවිච්චි කිරීමට (Option 2)."}, {"id": 17, "category": "short", "category_name": "短文 (Short Passage)", "passage": "<ruby>夏休み<rt>なつやすみ</rt></ruby>に沖縄へ行きました。<ruby>飛行機<rt>ひこうき</rt></ruby>に乗るのも沖縄に行くのも初めてでした。<ruby>海<rt>うみ</rt></ruby>が青くてとても美しかったです。3日間泳いだり、おいしい魚を食べたりして最高の時間を過ごしました。また来年も行きたいです。", "vocab": [{"word": "最高 (さいこう)", "en": "awesome / best", "si": "ඉහළම / සුපිරි"}, {"word": "過ごす (すごす)", "en": "to spend time", "si": "කාලය ගත කරනවා"}], "question": "この人について、正しいものはどれですか。", "options": ["1. 沖縄へ行くのは 2回目です", "2. 飛行機に 初めて 乗りました", "3. 泳ぐのが 嫌いでした", "4. 魚を 食べませんでした"], "correct": 1, "tip_en": "<strong>Teacher's Tip: First-time Experience!</strong><br>'飛行機に乗るのも...初めてでした' confirms Option 2.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: '初めて' (පළමු වතාව)!</strong><br>ගුවන් යානයට නැඟුණු පළමු වතාව වේ."}, {"id": 18, "category": "short", "category_name": "短文 (Short Passage)", "passage": "<ruby>私<rt>わたし</rt></ruby>はアニメを見て日本語を勉強しています。教科書の勉強は少し難しいですが、アニメの言葉は分かりやすくて面白いです。好きなキャラクターのセリフをノートに書いて、毎日覚えて練習しています。", "vocab": [{"word": "教科書 (きょうかしょ)", "en": "textbook", "si": "පැවරුම් පොත / පෙළපොත"}, {"word": "セリフ", "en": "anime lines / quotes", "si": "දෙබස්"}], "question": "この人は どうやって 日本語を 勉強していますか。", "options": ["1. 教科書だけを使って 勉強している", "2. アニメのセリフを ノートに書いて 練習している", "3. 毎日 友達と 日本語で 話している", "4. 日本の 歌を 歌っている"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Specific Action Scan!</strong><br>'セリフをノートに書いて、毎日覚えて練習しています' = Option 2.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: නිශ්චිත ක්‍රියාව!</strong><br>ඇනිමේ දෙබස් නෝට්බුක් එකේ ලියා පුහුණු වේ."}, {"id": 19, "category": "short", "category_name": "短文 (Short Passage)", "passage": "<ruby>夏<rt>なつ</rt></ruby>になると部屋がとても暑くなります。うちにはエアコンがなくて、扇風機しかありませんでした。でも、昨日その扇風機が壊れてしまいました。とても暑くて寝られなかったので、今日電気屋へ行ってエアコンを買いました。", "vocab": [{"word": "扇風機 (せんぷうき)", "en": "electric fan", "si": "විදුලි පංකාව"}, {"word": "壊れる (こわれる)", "en": "to break down", "si": "කඩනවා / කැඩෙනවා"}], "question": "この人は 今日 どうして エアコンを 買いましたか。", "options": ["1. 扇風機が 壊れて 暑くて寝られなかったから", "2. エアコンが 安く 売っていたから", "3. 扇風機より エアコンが 好きだから", "4. 友達に エアコンを もらったから"], "correct": 0, "tip_en": "<strong>Teacher's Tip: Cause & Effect Sequence!</strong><br>Fan broke -> Couldn't sleep -> Bought AC today (Option 1).", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: හේතුව සහ ඵලය!</strong><br>ෆෑන් එක කැඩී නිදා ගැනීමට නොහැකි වූ නිසා AC එකක් මිලදී ගත්තේය."}, {"id": 20, "category": "short", "category_name": "短文 (Short Passage)", "passage": "<ruby>駅<rt>えき</rt></ruby>の近くに小さなカフェがあります。クラシック音楽が流れていて、とても静かで落ち着く場所です。<ruby>私<rt>わたし</rt></ruby>は週末の午後、いつもそこで本を読みながらコーヒーを飲みます。自分だけの特別な時間です。", "vocab": [{"word": "流れる (ながれる)", "en": "to play (music) / flow", "si": "වාදනය වෙනවා / ගලනවා"}, {"word": "落ち着く (おちつく)", "en": "relaxing / calming", "si": "සන්සුන් වෙනවා"}], "question": "この人は 週末の午後 カフェで 何をしますか。", "options": ["1. 友達と おしゃべりをする", "2. コーヒーを飲みながら 本を読む", "3. ピアノの 練習をする", "4. 勉強を 教える"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Simultaneous action '〜ながら'!</strong><br>'コーヒーを飲みながら本を読みます' = Option 2.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: '〜ながら' (එකවර කරන ක්‍රියා)!</strong><br>කෝපි බොමින් පොත් කියවයි."}, {"id": 21, "category": "medium", "category_name": "中文・メール (Medium / Email)", "passage": "<strong>【まりさんから カクさんへのメール】</strong><br><br>カクさん、<ruby>勉強会<rt>べんきょうかい</rt></ruby>を いつ しましょうか。<br><ruby>来週<rt>らいしゅう</rt></ruby>、<ruby>月曜日<rt>げつようび</rt></ruby>の<ruby>午前中<rt>ごぜんちゅう</rt></ruby>は<ruby>時間<rt>じかん</rt></ruby>がありますが、<ruby>午後<rt>ごご</rt></ruby>は いそがしいです。<ruby>火曜日<rt>かようび</rt></ruby>は<ruby>午後<rt>ごご</rt></ruby> 会議がありますが、3<ruby>時<rt>じ</rt></ruby>に終わります。<ruby>水曜日<rt>すいようび</rt></ruby>と<ruby>木曜日<rt>もくようび</rt></ruby>は 東京にいません。<ruby>金曜日<rt>きんようび</rt></ruby>は 一日 だいじょうぶです。カクさんは どうですか。", "vocab": [{"word": "午前中 (ごぜんちゅう)", "en": "morning time", "si": "උදෑසන කාලය"}, {"word": "会議 (かいぎ)", "en": "meeting", "si": "රැස්වීම"}], "question": "カクさんと まりさんは <ruby>来週<rt>らいしゅう</rt></ruby> 毎日 <ruby>午前中<rt>ごぜんちゅう</rt></ruby> いそがしいです。いつ <ruby>勉強会<rt>べんきょうかい</rt></ruby>が できますか。", "options": ["1. 月曜日か 火曜日の 午後", "2. 月曜日か 金曜日の 午後", "3. 火曜日か 金曜日の 午後", "4. 水曜日か 木曜日の 午後"], "correct": 2, "tip_en": "<strong>Teacher's Tip: Schedule Intersection!</strong><br>Since morning is busy: Tue after 3PM & Fri all day are free (Option 3).", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: කාලසටහන් ගැලපීම!</strong><br>උදේ බිසී නිසා: අඟහරුවාදා සවස 3න් පසු සහ සිකුරාදා සවස පුළුවන්."}, {"id": 22, "category": "medium", "category_name": "中文・メール (Medium / Email)", "passage": "（上のメールを読んで答えてください）<br>まりさんは <ruby>水曜日<rt>すいようび</rt></ruby>と <ruby>木曜日<rt>もくようび</rt></ruby>、どうして <ruby>勉強会<rt>べんきょうかい</rt></ruby>が できませんか。", "vocab": [{"word": "東京にいません", "en": "Not in Tokyo", "si": "තෝකියෝ හි නැත"}], "question": "まりさんは 水曜日と 木曜日、どうして 勉強会が できませんか。", "options": ["1. 会議があるから", "2. 東京にいないから", "3. アルバイトがあるから", "4. 友達が来るから"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Direct Reason Match!</strong><br>'水曜日と木曜日は東京にいません' -> Option 2.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: කෙලින්ම ඇති හේතුව!</strong><br>'東京にいません' (තෝකියෝවේ නැත) කියා ඇත."}, {"id": 23, "category": "medium", "category_name": "中文・メール (Medium / Email)", "passage": "先週の土曜日、私は友達のキムさんと一緒に京都へ行きました。京都までは新幹線で約1時間かかりました。着いてから、まず有名なお寺を見に行きました。古い建物がたくさんあって、とても静かでした。<br><br>昼ごはんは、お寺の近くの店で和食を食べました。少し高かったですが、とてもおいしかったです。午後はバスで大きな公園へ行きました。桜の花が咲いていて、写真をたくさん撮りました。", "vocab": [{"word": "新幹線 (しんかんせん)", "en": "bullet train", "si": "අතිවේගී දුම්රිය"}, {"word": "和食 (わしょく)", "en": "Japanese food", "si": "ජපන් කෑම"}], "question": "京都で 最初に 何をしましたか。", "options": ["1. 昼ごはんを食べた", "2. 公園で写真を撮った", "3. 有名なお寺を見に行った", "4. バスに乗った"], "correct": 2, "tip_en": "<strong>Teacher's Tip: Keyword 'まず'!</strong><br>'まず有名なお寺を見に行きました' -> Option 3.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: 'まず' (පළමුව)!</strong><br>පළමුවෙන්ම විහාරය බලන්න ගියේය."}, {"id": 24, "category": "medium", "category_name": "中文・メール (Medium / Email)", "passage": "（上の文章を読んで答えてください）<br>昼ごはんについて、文章の内容と合っているものはどれですか。", "vocab": [{"word": "和食", "en": "Japanese food", "si": "ජපන් කෑම"}], "question": "昼ごはんについて、文章の内容と合っているものはどれですか。", "options": ["1. 安くて おいしかった", "2. 高かったが おいしかった", "3. 公園の中で 食べた", "4. 新幹線の中で 食べた"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Adjective Match!</strong><br>'少し高かったですが、とてもおいしかったです' -> Option 2.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: විශේෂණ පද!</strong><br>'少し高かったですが、おいしかったです' = 2 වන පිළිතුර."}, {"id": 25, "category": "medium", "category_name": "中文・メール (Medium / Email)", "passage": "<strong>【山田先生から 学生へのお知らせ】</strong><br><br>みなさん、来週の木曜日に クラスで 料理教室を行います。<br>時間は 午前10時から 午後1時までです。<br>場所は スクール2階の キッチンルームです。<br><br>当日は エプロンと タオルを 持ってきてください。材料は スクールで 準備しますので、持ってくる必要はありません。参加したい人は、今週の金曜日までに 山田に 言ってください。", "vocab": [{"word": "エプロン", "en": "apron", "si": "ඇප්රන් එක"}, {"word": "材料 (ざいりょう)", "en": "ingredients", "si": "අමුද්‍රව්‍ය"}], "question": "学生は 当日 何を持っていかなければなりませんか。", "options": ["1. 料理の材料と エプロン", "2. エプロンと タオル", "3. タオルと 料理の材料", "4. 何も持っていかなくていい"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Must bring vs Not needed!</strong><br>Bring: エプロンとタオル. Not needed: 材料 (Option 2).", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: ගෙන ආ යුතු දේ!</strong><br>ගෙන ආ යුතු දේ: エプロン සහ タオル."}, {"id": 26, "category": "medium", "category_name": "中文・メール (Medium / Email)", "passage": "（上の文章を読んで答えてください）<br>料理教室に参加したい人は、どうしなければなりませんか。", "vocab": [{"word": "参加 (さんか)", "en": "participation", "si": "සහභාගී වීම"}], "question": "料理教室に参加したい人は、どうしなければなりませんか。", "options": ["1. 今週の金曜日までに 山田先生に言う", "2. 来週の木曜日までに 材料を買う", "3. 木曜日の午前10時に エプロンを買う", "4. 金曜日までに キッチンへ行く"], "correct": 0, "tip_en": "<strong>Teacher's Tip: Deadline Match!</strong><br>'今週の金曜日までに 山田に 言ってください' -> Option 1.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: අවසාන දිනය!</strong><br>'今週の金曜日までに 山田に言ってください' = 1 වන පිළිතුර."}, {"id": 27, "category": "medium", "category_name": "中文・メール (Medium / Email)", "passage": "私はコンビニでアルバイトをしています。週に3日、夜の6時から10時まで働いています。仕事はレジでお会計をしたり、商品を棚に並べたりすることです。<br><br>最初はレジの操作が難しくて失敗することもありました。でも、先輩が優しく教えてくれたので今はスムーズにできます。外国人の旅行客もたくさん来るので、英語で話す機会もあって楽しいです。", "vocab": [{"word": "レジ", "en": "cash register", "si": "කෑෂ් රෙජිස්ටරය"}, {"word": "機会 (きかい)", "en": "opportunity", "si": "අවස්ථාව"}], "question": "この人は コンビニで どんな仕事をしていますか。", "options": ["1. 料理を作ることと お掃除", "2. レジでお会計と 商品を並べること", "3. 英語を教えること", "4. 夜10時から 朝まで働くこと"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Work Duty Scan!</strong><br>'レジでお会計をしたり、商品を棚に並べたり' -> Option 2.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: රාජකාරිය!</strong><br>'レジでお会計...商品を並べる' කියා ඇත."}, {"id": 28, "category": "medium", "category_name": "中文・メール (Medium / Email)", "passage": "（上の文章を読んで答えてください）<br>この人は どうして アルバイトが 楽しいと言っていますか。", "vocab": [{"word": "旅行客 (りょこうきゃく)", "en": "tourists", "si": "සංචාරකයින්"}], "question": "この人は どうして アルバイトが 楽しいと言っていますか。", "options": ["1. 時給が高いから", "2. 英語で話す機会もあるから", "3. 一人で静かに働けるから", "4. 失敗しても怒られないから"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Reason at sentence end!</strong><br>'英語で話す機会もあって楽しいです' -> Option 2.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: සතුටට හේතුව!</strong><br>'英語で話す機会もあって楽しい' = 2 වන පිළිතුර."}, {"id": 29, "category": "medium", "category_name": "中文・メール (Medium / Email)", "passage": "私の趣味は写真を撮ることです。休みの日はカメラを持って出かけます。先月は綺麗な海がある町へ行きました。そこで夕方の赤い空と海の写真を撮りました。インターネットのコンテストに応募したところ、なんと2位になりました！とても嬉しかったです。", "vocab": [{"word": "夕方 (ゆうがた)", "en": "evening", "si": "සවස"}, {"word": "応募する", "en": "to enter contest", "si": "ඉල්ලුම් කරනවා"}], "question": "この人は コンテストで どんな写真を 応募しましたか。", "options": ["1. 山と空の写真", "2. 夕方の赤い空と海の写真", "3. 綺麗なカメラの写真", "4. 友達と一緒に撮った写真"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Photo subject!</strong><br>'夕方の赤い空と海の写真を撮りました...応募しました' -> Option 2.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: ඡායාරූපය!</strong><br>'夕方の赤い空と海の写真' තරඟයට යැවීය."}, {"id": 30, "category": "medium", "category_name": "中文・メール (Medium / Email)", "passage": "（上の文章を読んで答えてください）<br>コンテストの 結果について、文章の内容と 合っているものはどれですか。", "vocab": [{"word": "結果 (けっか)", "en": "result", "si": "ප්‍රතිඵලය"}], "question": "コンテストの 結果について、文章の内容と 合っているものはどれですか。", "options": ["1. 1位になった", "2. 2位になった", "3. 負けて悲しかった", "4. まだ結果は来ていない"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Exact Rank Scan!</strong><br>'なんと2位になりました！' -> Option 2.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: ස්ථානය!</strong><br>'2位になりました' (2 වන ස්ථානය ලැබුණි)."}, {"id": 31, "category": "medium", "category_name": "中文・メール (Medium / Email)", "passage": "<strong>【田中さんから 佐藤さんへのメール】</strong><br><br>佐藤さん、こんにちは。昨日、風邪をひいて高熱が出たため、大学の授業を休んでしまいました。すみませんでした。<br>もしよかったら、昨日の「日本語学」のノートを写真で送ってもらえませんか。来週のテストの勉強に使いたいです。よろしくお願いします。", "vocab": [{"word": "高熱 (こうねつ)", "en": "high fever", "si": "තද උණ"}, {"word": "ノート", "en": "notes", "si": "සටහන්"}], "question": "田中さんは どうして 佐藤さんに メールをしましたか。", "options": ["1. 一緒にテスト勉強をしたいから", "2. 昨日の授業のノートを送ってほしいから", "3. 風邪の薬を買ってきてほしいから", "4. 大学を休む連絡をするため"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Request Clause '〜してもらえませんか'!</strong><br>'ノートを写真で送ってもらえませんか' -> Option 2.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: ඉල්ලීම '〜してもらえませんか'!</strong><br>සටහන් වල පින්තූරයක් එවන්න කියා ඉල්ලයි."}, {"id": 32, "category": "medium", "category_name": "中文・メール (Medium / Email)", "passage": "（上のメールを読んで答えてください）<br>田中さんは 昨日 どうして 授業を 休みましたか。", "vocab": [{"word": "風邪 (かぜ)", "en": "cold / flu", "si": "හෙම්බිරිස්සාව / උණ"}], "question": "田中さんは 昨日 どうして 授業を 休みましたか。", "options": ["1. テストの勉強をしたかったから", "2. 風邪をひいて熱が出たから", "3. アルバイトがあったから", "4. 旅行に行っていたから"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Cause Indicator '〜ため'!</strong><br>'風邪をひいて高熱が出たため...休んでしまいました' -> Option 2.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: හේතුව '〜ため'!</strong><br>උණ සහ හෙම්බිරිස්සාව නිසා පන්තියට ආවේ නැත."}, {"id": 33, "category": "medium", "category_name": "中文・メール (Medium / Email)", "passage": "私の町には誰でも使える「みんなの畑（はたけ）」があります。月500円で小さな場所を借りて、好きな野菜を育てることができます。私は今年からトマトとキュウリを作っています。<br>週末になると、近所の人たちと一緒に水やりや草むしりをします。自分で育てた野菜はとても新鮮でおいしいです。", "vocab": [{"word": "畑 (はたけ)", "en": "farm / vegetable field", "si": "වගා බිම"}, {"word": "新鮮 (しんせん)", "en": "fresh", "si": "අලුත් / නැවුම්"}], "question": "「みんなの畑」について、正しいものはどれですか。", "options": ["1. 無料で 野菜がもらえる", "2. 月500円で 野菜を育てることができる", "3. 毎日 行かなければならない", "4. 育てた野菜を 売らなければならない"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Price & Function!</strong><br>'月500円で...好きな野菜を育てることができます' -> Option 2.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: මිල සහ කාර්යය!</strong><br>මාසයකට 500円 කින් එළවළු වගා කළ හැක."}, {"id": 34, "category": "medium", "category_name": "中文・メール (Medium / Email)", "passage": "（上の文章を読んで答えてください）<br>この人は 週末に 近所の人と 何をしますか。", "vocab": [{"word": "草むしり (くさむしり)", "en": "weeding", "si": "වල් පැළෑටි අයින් කිරීම"}], "question": "この人は 週末に 近所の人と 何をしますか。", "options": ["1. 野菜を 売る", "2. 水やりや 草むしりをする", "3. 料理を作って 食べる", "4. 畑を 探す"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Weekend action scan!</strong><br>'週末になると...水やりや草むしりをします' -> Option 2.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: සති අන්ත ක්‍රියා!</strong><br>වතුර දැමීම සහ වල් පැළෑටි අයින් කිරීම කරයි."}, {"id": 35, "category": "medium", "category_name": "中文・メール (Medium / Email)", "passage": "先週、初めて日本の伝統的な「旅館（りょかん）」に泊まりました。部屋に入ると、床が畳（たたみ）になっていて、よい香りがしました。ベッドではなく、布団（ふとん）を敷いて寝ました。<br>一番感動したのは温泉です。大きなお風呂に入って、とてもリラックスできました。夕食の懐石料理もきれいで美しかったです。", "vocab": [{"word": "旅館 (りょかん)", "en": "Japanese inn", "si": "සාම්ප්‍රදායික ජපන් හෝටලය"}, {"word": "感動 (かんどう)", "en": "deeply moved / impressed", "si": "මනසේ ඇඳී යාම / ආකර්ෂණය"}], "question": "この人が 旅館で 一番 感動したものは 何ですか。", "options": ["1. 畳の部屋", "2. 布団", "3. 温泉", "4. 朝ご飯"], "correct": 2, "tip_en": "<strong>Teacher's Tip: Superlative '一番'!</strong><br>'一番感動したのは温泉です' -> Option 3.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: '一番' (වැඩිම/ඉහළම)!</strong><br>වැඩිපුම ආකර්ෂණය වූයේ '温泉' (උණුදිය උල්පත) ට වේ."}, {"id": 36, "category": "medium", "category_name": "中文・メール (Medium / Email)", "passage": "（上の文章を読んで答えてください）<br>この人は 部屋で どうやって 寝ましたか。", "vocab": [{"word": "布団 (ふとん)", "en": "futon bedding", "si": "ෆුටොන් ඇඳ ඇතිරිලි"}], "question": "この人は 部屋で どうやって 寝ましたか。", "options": ["1. 大きなベッドで寝た", "2. 椅子の上で寝た", "3. 布団を敷いて寝た", "4. 温泉の中で寝た"], "correct": 2, "tip_en": "<strong>Teacher's Tip: Exact Bedding Match!</strong><br>'ベッドではなく、布団を敷いて寝ました' -> Option 3.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: නිදාගත් ආකාරය!</strong><br>'布団を敷いて寝ました' (ෆුටොන් එලා නිදා ගත්තේය)."}, {"id": 37, "category": "medium", "category_name": "中文・メール (Medium / Email)", "passage": "<strong>【バス会社からのお知らせ】</strong><br><br>道路工事のため、10月10日（月）から15日（土）まで、北口バス停は使用できません。期間中は、100メートル先の「臨時バス停」をご利用ください。<br>なお、バスの運行時刻に変更はありません。ご迷惑をおかけしますが、ご協力をお願いいたします。", "vocab": [{"word": "工事 (こうじ)", "en": "construction", "si": "ඉදිකිරීම්"}, {"word": "臨時 (りんじ)", "en": "temporary", "si": "තාලික"}], "question": "北口バス停は どうして 使えませんか。", "options": ["1. バスが 来なくなったから", "2. 道路工事をするから", "3. 時間が変わったから", "4. 台風が 来ているから"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Reason Noun '〜のため'!</strong><br>'道路工事のため...使用できません' -> Option 2.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: හේතුව '〜のため'!</strong><br>පාරේ ඉදිකිරීම් කටයුතු (道路工事) නිසා භාවිත කළ නොහැක."}, {"id": 38, "category": "medium", "category_name": "中文・メール (Medium / Email)", "passage": "（上の文章を読んで答えてください）<br>10月12日に バスに 乗りたい人は、どこへ 行けばいいですか。", "vocab": [{"word": "臨時バス停", "en": "temporary bus stop", "si": "තාලික බස් නැවතුම"}], "question": "10月12日に バスに 乗りたい人は、どこへ 行けばいいですか。", "options": ["1. 北口バス停", "2. 南口バス停", "3. 100メートル先の 臨時バス停", "4. バス会社の 事務所"], "correct": 2, "tip_en": "<strong>Teacher's Tip: Alternative Location Scan!</strong><br>Oct 12 is within Oct 10-15 -> Use '100メートル先の臨時バス停' (Option 3).", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: වෙනත් ස්ථානය!</strong><br>ඔක්තෝබර් 12 දිනය කාලසීමාව තුළ ඇති බැවින් 100m දුරින් ඇති 臨時バス停 එකට යා යුතුය."}, {"id": 39, "category": "medium", "category_name": "中文・メール (Medium / Email)", "passage": "私は毎週日曜日に自分でカレーを作ります。日本のカレーは玉ねぎ、人参、ジャガイモ、肉を入れて煮込みます。私のアパートの隠し味は、最後にチョコレートを少し入れることです。これでコクが出て、とてもおいしくなります。友達にも大人気です。", "vocab": [{"word": "隠し味 (かくしあじ)", "en": "secret ingredient", "si": "රහස් රසකාරකය"}, {"word": "煮込む (にこむ)", "en": "to stew / simmer", "si": "තම්බනවා / තම්බා ගන්නවා"}], "question": "この人の カレーの「隠し味」は 何ですか。", "options": ["1. りんご", "2. チョコレート", "3. 砂糖", "4. 牛乳"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Direct Noun Match!</strong><br>'隠し味は...チョコレートを少し入れることです' -> Option 2.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: රහස් රසකාරකය!</strong><br>'隠し味はチョコレート' (චොකලට් ටිකක් එකතු කිරීම)."}, {"id": 40, "category": "medium", "category_name": "中文・メール (Medium / Email)", "passage": "（上の文章を読んで答えてください）<br>この人の カレーについて、正しいものはどれですか。", "vocab": [{"word": "大人気 (だいにんき)", "en": "very popular", "si": "ඉතා ජනප්‍රියයි"}], "question": "この人の カレーについて、正しいものはどれですか。", "options": ["1. 友達に 人気がない", "2. 毎週 日曜日に 作っている", "3. 辛すぎて 食べられない", "4. レストランで 売っている"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Time Routine Check!</strong><br>'毎週日曜日に自分でカレーを作ります' -> Option 2.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: සතිපතා පුරුද්ද!</strong><br>සෑම ඉරිදා දිනකම තමා විසින්ම සාදනු ලබයි."}, {"id": 41, "category": "info", "category_name": "情報検索 (Info Search)", "passage": "<strong>【クーポン券】</strong><br>店内全品 <strong>3割引</strong> （さけ・たばこ除く）<br>ご利用期間：3/9 〜 3/23<br>たかみ店のみ ご利用いただけます。<br>KKマーケット", "vocab": [{"word": "割引 (わりびき)", "en": "discount (3割=30%)", "si": "වට්ටම්"}, {"word": "除く (のぞく)", "en": "excluding", "si": "හැර"}], "question": "この クーポン券を 使って、1000円の おさけと 800円の ジュースを 買います。ぜんぶで いくらですか。", "options": ["1. 1500円", "2. 1560円", "3. 1260円", "4. 540円"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Exception Calculation!</strong><br>Sake (1000円) is EXCLUDED from discount. Juice (800円) gets 30% off (560円). Total = 1000 + 560 = 1560円 (Option 2).", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: ව්‍යතිරේක ගණනය!</strong><br>අරක්කු වලට වට්ටම් නැත (1000円). ජූස් වලට 30% වට්ටම (560円). එකතුව 1560円."}, {"id": 42, "category": "info", "category_name": "情報検索 (Info Search)", "passage": "<strong>【休講のお知らせ】</strong><br>台風で、さくら線と あさひ線の 電車が 止まっています。<br>・初級Ⅰ (9:00〜10:30) → お休みです。<br>・中級Ⅰ (9:00〜10:30) → 13日(土) 9:00〜10:30です。<br>・中級Ⅱ (10:40〜12:10) → 20日(土) 10:40〜12:10です。<br>・漢字Ⅰ (10:40〜12:10) → お休みです。", "vocab": [{"word": "休講 (きゅうこう)", "en": "cancelled class", "si": "අවලංගු වූ පන්ති"}], "question": "マットさんは 中級Ⅰの 学生です。つぎの 授業は いつですか。", "options": ["1. 13日の 9時からです", "2. 20日の 9時からです", "3. まだ わかりません", "4. お休みです"], "correct": 0, "tip_en": "<strong>Teacher's Tip: Row Alignment!</strong><br>Find '中級Ⅰ' -> Reads '13日(土) 9:00〜10:30です' -> Option 1.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: පේළිය බලන්න!</strong><br>'中級Ⅰ' ඉදිරියෙන් ඇති දිනය 13日 9:00 වේ."}, {"id": 43, "category": "info", "category_name": "情報検索 (Info Search)", "passage": "<strong>【電気の 会社を 変えませんか？】</strong><br>いまの会社：7,524円/月<br>・ひかりテコレ：7,433円 (91円安い)<br>・DDエレライン：7,511円 (13円安い)<br>・あすかでんき：7,361円 (163円安い)<br>※ひかりテコレ、DDエレラインは 電話といっしょのプランもあります。<br>その場合、電気1か月は：<br>・ひかりテコレ…7,347円 → 177円安いです。<br>・DDエレライン…7,356円 → 168円安いです。", "vocab": [{"word": "変える (かえる)", "en": "to change / switch", "si": "වෙනස් කරනවා"}], "question": "ジョンさんは、電気も 電話も いまの会社から 変えたいです。どの会社が 安くて いいですか。", "options": ["1. ひかりテコレ", "2. DDエレライン", "3. あすかでんき", "4. ふるいちパワー"], "correct": 0, "tip_en": "<strong>Teacher's Tip: Check Footnote (*)!</strong><br>With phone plan: ひかりテコレ is 7,347円 (cheapest overall) -> Option 1.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: යටින් ඇති සටහන්!</strong><br>දුරකථනය සමඟ ひかりテコレ 7,347円 කින් අඩුම වේ."}, {"id": 44, "category": "info", "category_name": "情報検索 (Info Search)", "passage": "<strong>【5日分の 薬です】</strong><br>1. フェルミロン (食後) - 1日3回、ごはんを食べたあと 30分以内に 飲んでください。<br>2. コロビッツ (食間) - 1日2回、ごはんを食べるまえか ごはんとごはんの あいだに 飲んでください。<br>3. ジズパ (とんぷく) - 痛いときだけ、飲んでください。", "vocab": [{"word": "とんぷく", "en": "taken only when symptoms occur", "si": "අමාරු වූ විට පමණක් බොන"}], "question": "チャリヤーさんは 今日 お腹は 痛くありません。今日、薬を どう 飲みますか。", "options": ["1. 1を3回、2を2回 飲んで、3は飲まない", "2. 1を3回、2を2回、3を1回飲む", "3. 1を3回、2を2回、3も2回飲む", "4. お腹が痛くないので、何も飲まない"], "correct": 0, "tip_en": "<strong>Teacher's Tip: Pain condition check!</strong><br>No stomach pain today -> Do NOT take Med 3 (ジズパ). Take 1 and 2 as usual -> Option 1.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: කැක්කුම නොමැති විට!</strong><br>අද කැක්කුමක් නැති බැවින් 3 නොබොයි. 1 සහ 2 පමණක් බොයි."}, {"id": 45, "category": "info", "category_name": "情報検索 (Info Search)", "passage": "（上の薬の説明を読んで答えてください）<br>コロビッツ（薬2）は いつ 飲みますか。", "vocab": [{"word": "食間 (しょっかん)", "en": "between meals", "si": "කෑම වේල් අතරතුර"}], "question": "コロビッツ（薬2）は いつ 飲みますか。", "options": ["1. ごはんを 食べた あと 30分以内", "2. 痛い ときだけ", "3. ごはんを 食べるまえか ごはんとごはんの あいだ", "4. 寝るまえ"], "correct": 2, "tip_en": "<strong>Teacher's Tip: Exact Match for Med 2!</strong><br>'ごはんを食べるまえか ごはんとごはんの あいだ' -> Option 3.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: 2 වන බෙහෙත!</strong><br>'ごはんを食べるまえか ごはんとごはんのあいだ' = 3 වන පිළිතුර."}, {"id": 46, "category": "info", "category_name": "情報検索 (Info Search)", "passage": "<strong>【図書館で 映画を 見ましょう！】</strong><br>2月16日(土) 午後2時〜『春の庭』<br>場所：図書館 3階 Aホール / 定員：50人<br>✿ 申し込みは いりません。3階 Aホールに 来てください。<br>✿ 子ども(10才まで)は、保育室で 世話をします。4階「保育室」に 来てください。", "vocab": [{"word": "保育室 (ほいくしつ)", "en": "nursery / playroom", "si": "ළමා සුරැකුම් කාමරය"}], "question": "すずきさんは、いつも 4才の子どもと いっしょに 図書館に行きます。16日、すずきさんは どうしますか。", "options": ["1. 子どもは 4階に行って、すずきさんは 3階に行く", "2. 子どもと 3階に行って、いっしょに 映画を見る", "3. 映画の 申し込みをする", "4. 子どもと 4階に行って 映画を見る"], "correct": 0, "tip_en": "<strong>Teacher's Tip: Separation of Adult & Child!</strong><br>Child (4yo) -> 4F 保育室. Suzuki (Adult) -> 3F Aホール (Option 1).", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: ළමුන් සහ වැඩිහිටියන්!</strong><br>ළමයා (අවු. 4) 4F, සුසුකි 3F Aホール එකට යා යුතුය."}, {"id": 47, "category": "info", "category_name": "情報検索 (Info Search)", "passage": "<strong>【さくら 市民プール 利用案内】</strong><br>利用時間 10:00〜21:00 / 休館日：木曜日<br>料金：<br>・さくら市民：大人 300円 / 4才〜中学生 150円 (2時間)<br>・さくら市民以外：大人 400円 / 4才〜中学生 200円 (2時間)<br>【水泳教室】水曜日 18:00〜19:00 (小学4年生〜 500円)", "vocab": [{"word": "以外 (いがい)", "en": "non-resident / except", "si": "පිටත අය / හැර"}], "question": "みどり市に 住んでいる 田中さんは、17時に 中学生の子ども一人と プールに行きました。二人で 水泳教室にも 出席しました。19時に 家に帰りました。ぜんぶで いくらですか。", "options": ["1. 1800円", "2. 1600円", "3. 1450円", "4. 600円"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Step-by-step Fee Sum!</strong><br>Non-resident fee: Adult 400円 + Middle schooler 200円 = 600円. Swimming class: 500円 x 2 = 1000円. Total = 1600円 (Option 2).", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: එකතුව ගණනය!</strong><br>නගරයෙන් පිටත: 400 + 200 = 600円. පන්තිය: 500 x 2 = 1000円. එකතුව 1600円."}, {"id": 48, "category": "info", "category_name": "情報検索 (Info Search)", "passage": "（上の市民プールの案内を読んで答えてください）<br>さくら市民プールについて、正しいものはどれですか。", "vocab": [{"word": "休館日 (きゅうかんび)", "en": "closed day", "si": "වසා තබන දිනය"}], "question": "さくら市民プールについて、正しいものはどれですか。", "options": ["1. 木曜日は プールに 入ることができない", "2. さくら市民は 水泳教室が 無料", "3. 夜10時まで プールが 使える", "4. 水泳帽子は かぶらなくていい"], "correct": 0, "tip_en": "<strong>Teacher's Tip: Closed Day Match!</strong><br>'休館日：木曜日' -> Cannot enter on Thursday (Option 1).", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: වසා තබන දිනය!</strong><br>'休館日：木曜日' බ්‍රහස්පතින්දා වසා ඇත."}, {"id": 49, "category": "info", "category_name": "情報検索 (Info Search)", "passage": "<strong>【バスの 時刻表（駅から 市役所ゆき）】</strong><br>・平日（月〜金）：7:10 / 7:30 / 8:00 / 8:30 / 9:10<br>・土曜日・日曜日：8:10 / 9:00 / 10:00<br>※市役所まで 約20分かかります。<br>※8時前の バスは混雑します。", "vocab": [{"word": "時刻表 (じこくひょう)", "en": "timetable", "si": "කාලසටහන"}], "question": "火曜日の 朝 8時半までに 市役所に 着きたいです。駅から 何時の バスに乗ればいいですか。", "options": ["1. 7時10分", "2. 7時30分", "3. 8時00分", "4. 8時10分"], "correct": 2, "tip_en": "<strong>Teacher's Tip: Arrival Time Calculation!</strong><br>Journey takes 20 min. 8:00 bus arrives at 8:20 (before 8:30 deadline) on Tuesday (weekday) -> Option 3.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: ගමන් කාලය!</strong><br>මිනිත්තු 20ක් යන බැවින් 8:00 බස් රථය 8:20ට ළඟා වේ (Option 3)."}, {"id": 50, "category": "info", "category_name": "情報検索 (Info Search)", "passage": "<strong>【レストランの サービス案内】</strong><br>・ランチタイム（11:00〜14:00）：すべてのメニューに ドリンクがつきます。<br>・ディナータイム（17:00〜22:00）：1000円以上 食べた人に デザートを プレゼントします。<br>※土曜・日曜日・祝日は ドリンクサービスは ありません。", "vocab": [{"word": "祝日 (しゅくじつ)", "en": "holiday", "si": "ජාතික నిවාඩු දිනය"}], "question": "水曜日の 12時に 800円の ランチを食べました。どんな サービスがありますか。", "options": ["1. ドリンクが 無料でつく", "2. デザートが もらえる", "3. ドリンクと デザートの両方が もらえる", "4. サービスは ない"], "correct": 0, "tip_en": "<strong>Teacher's Tip: Lunch vs Dinner rules!</strong><br>Wed 12:00 = Weekday Lunch -> Drink service included (Option 1).", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: මධ්‍යහ්න සේවාව!</strong><br>බදාදා දවල් 12:00 = බීම නොමිලේ (ドリンクサービス)."}, {"id": 51, "category": "info", "category_name": "情報検索 (Info Search)", "passage": "<strong>【フリーマーケット 出店募集】</strong><br>日時：11月3日（土）10:00〜15:00<br>場所：中央公園（雨のときは 市民体育館）<br>出店料：1ブース 1,000円<br>申込締切：10月20日（金）<br>※プロの販売店は 出店できません。個人の不用品整理に限ります。", "vocab": [{"word": "出店料 (しゅってんりょう)", "en": "booth fee", "si": "කුටිය සඳහා ගාස්තුව"}, {"word": "不用品 (ふようひん)", "en": "unused items", "si": "නොපාවිච්චි කරන දේ"}], "question": "フリーマーケットに 出店したい人は、どうしなければなりませんか。", "options": ["1. 10月20日までに 申し込んで 1000円払う", "2. 11月3日に 直接体育館へ行く", "3. お店で売っている商品を たくさん準備する", "4. 雨が降ったら 参加をキャンセルする"], "correct": 0, "tip_en": "<strong>Teacher's Tip: Deadline & Fee Match!</strong><br>Deadline: Oct 20. Fee: 1,000円 -> Option 1.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: දිනය සහ ගාස්තුව!</strong><br>ඔක්තෝබර් 20ට පෙර ඉල්ලුම් කර 1000円 ගෙවිය යුතුය."}, {"id": 52, "category": "info", "category_name": "情報検索 (Info Search)", "passage": "<strong>【ごみ出しのカレンダー（さくら町）】</strong><br>・もえるごみ：月曜日・木曜日（朝8時まで）<br>・かん・びん：水曜日（朝8時まで）<br>・ペットボトル：第1・第3金曜日（朝8時まで）<br>※祝日も 通常通り 集めます。指定のごみ袋を使ってください。", "vocab": [{"word": "もえるごみ", "en": "burnable trash", "si": "දිරන / දවන කසළ"}, {"word": "指定 (してい)", "en": "designated", "si": "නියමිත"}], "question": "ジュースの缶（かん）を すてたいです。いつ 出せばいいですか。", "options": ["1. 月曜日の 朝8時まで", "2. 水曜日の 朝8時まで", "3. 金曜日の 朝8時まで", "4. 木曜日の 夜"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Trash Category Match!</strong><br>'かん・びん' = 水曜日 (Wednesday) morning before 8am -> Option 2.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: කසළ වර්ගය!</strong><br>කෑන් (かん) සඳහා බදාදා (水曜日) උදේ 8ට පෙර."}, {"id": 53, "category": "info", "category_name": "情報検索 (Info Search)", "passage": "<strong>【歴史博物館 入館料】</strong><br>・大人：800円<br>・高校生・大学生：500円<br>・小・中学生：300円（土曜日は 小学生無料）<br>※20名以上の 団体は 各100円引き。<br>※毎週月曜日は 休館日です（祝日の場合は 翌日休館）。", "vocab": [{"word": "入館料 (にゅうかんりょう)", "en": "admission fee", "si": "ඇතුළුවීමේ ගාස්තුව"}, {"word": "団体 (だんたい)", "en": "group", "si": "කණ්ඩායම"}], "question": "土曜日に 小学生の子ども2人と 大人1人で 行きます。入館料は ぜんぶで いくらですか。", "options": ["1. 1400円", "2. 1100円", "3. 800円", "4. 600円"], "correct": 2, "tip_en": "<strong>Teacher's Tip: Saturday Special Rule!</strong><br>Adult = 800円. Elementary kids on Saturday = FREE! Total = 800円 (Option 3).", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: සෙනසුරාදා නිදහස් නීතිය!</strong><br>සෙනසුරාදා දිනවල ප්‍රාථමික ළමුන් නොමිලේ! වැඩිහිටි ටිකට් එක 800円 පමණයි."}, {"id": 54, "category": "info", "category_name": "情報検索 (Info Search)", "passage": "<strong>【日本語学校の コース案内】</strong><br>・朝コース（月〜金 9:00〜12:00）：月額 20,000円<br>・夜コース（火・木 18:30〜20:30）：月額 12,000円<br>・土曜コース（土 10:00〜15:00）：月額 15,000円<br>※初めての人は 入学金 5,000円が 別途必要です。", "vocab": [{"word": "月額 (げつがく)", "en": "monthly fee", "si": "මාසික ගාස්තුව"}, {"word": "別途 (べっと)", "en": "separately", "si": "වෙනම"}], "question": "会社員の パークさんは 仕事が終わったあと 勉強したいです。初めて 通う場合、最初の月に いくら 払いますか。", "options": ["1. 12,000円", "2. 17,000円", "3. 20,000円", "4. 25,000円"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Evening Course + Admission Fee!</strong><br>After work = Evening course (12,000円). First time = Admission fee (+5,000円). Total = 17,000円 (Option 2).", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: රාත්‍රී පන්තිය + ඇතුළත්වීමේ ගාස්තුව!</strong><br>රාත්‍රී පන්තිය (12,000円) + ඇතුළත්වීම (5,000円) = 17,000円."}, {"id": 55, "category": "info", "category_name": "情報検索 (Info Search)", "passage": "<strong>【電車 遅延（ちえん）のお知らせ】</strong><br>現在、大雨のため「みどり線」は 全線で 運転を見合わせています。<br>「あおい線」は 約15分 遅れて 運転しています。<br>「あか線」は 通常通り 運転しています。振替輸送（ふりかえゆそう）を ご利用ください。", "vocab": [{"word": "遅延 (ちえん)", "en": "train delay", "si": "දුම්රිය ප්‍රමාදය"}, {"word": "見合わせる", "en": "suspend operation", "si": "ක්‍රියාත්මක වීම නවත්වනවා"}], "question": "いま 普通に 動いている 電車は どの線ですか。", "options": ["1. みどり線", "2. あおい線", "3. あか線", "4. 全ての線"], "correct": 2, "tip_en": "<strong>Teacher's Tip: Normal Operation Scan '通常通り'!</strong><br>'「あか線」は 通常通り 運転しています' -> Option 3.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: '通常通り' (සාමාන්‍ය පරිදි)!</strong><br>'あか線' දුම්රිය මාර්ගය සාමාන්‍ය පරිදි ධාවනය වේ."}, {"id": 56, "category": "info", "category_name": "情報検索 (Info Search)", "passage": "<strong>【アパートの 情報表】</strong><br>・Aマンション：家賃 6.5万円 / 駅から徒歩5分 / ペット可 / 築10年<br>・Bハイツ：家賃 5.8万円 / 駅から徒歩15分 / ペット不可 / 築5年<br>・Cコーポ：家賃 6.0万円 / 駅から徒歩8分 / ペット可 / 築20年<br>・Dビル：家賃 7.0万円 / 駅から徒歩3分 / ペット不可 / 築2年", "vocab": [{"word": "家賃 (やちん)", "en": "rent price", "si": "ගෙවල් කුලිය"}, {"word": "徒歩 (とほ)", "en": "walking distance", "si": "පාගමනින්"}], "question": "猫と一緒に 住みたくて、家賃が 6.5万円以下の アパートを探しています。駅から 10分以内の アパートは どれですか。", "options": ["1. Aマンション", "2. Bハイツ", "3. Cコーポ", "4. Dビル"], "correct": 0, "tip_en": "<strong>Teacher's Tip: Filter 3 Conditions!</strong><br>1. Pet allowed (ペット可): A & C.<br>2. Rent <= 6.5万: A (6.5万), C (6.0万).<br>3. Walk <= 10 min: A (5分) vs C (8分)? Wait, both are <= 10 min, but A is exactly 6.5万 and 5 min walk! Let's verify: Option 1 (A) or 3 (C). A is 6.5万 & 5 min!", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: කොන්දේසි 3ම ගලපන්න!</strong><br>1. සුරතලුන් (ペット可): A සහ C.<br>2. කුලිය <= 6.5万: A (6.5), C (6.0).<br>3. විනාඩි 10ට අඩු: A (මිනිත්තු 5) නිවැරදියි!"}, {"id": 57, "category": "info", "category_name": "情報検索 (Info Search)", "passage": "<strong>【スポーツジム 会員料金】</strong><br>・フルタイム会員：月額 9,000円（全日 10:00〜22:00 利用可能）<br>・デイ会員：月額 6,500円（平日 10:00〜17:00 利用可能）<br>・ナイト会員：月額 7,000円（平日 17:00〜22:00 利用可能）<br>・ホリデー会員：月額 6,000円（土日・祝日 10:00〜22:00 利用可能）", "vocab": [{"word": "会員 (かいいん)", "en": "member", "si": "සාමාජිකයා"}, {"word": "利用可能 (りようかのう)", "en": "available to use", "si": "භාවිත කළ හැකි"}], "question": "平日の 夜 19時から 21時まで 通いたい人は、どの会員が 一番 安いですか。", "options": ["1. フルタイム会員", "2. デイ会員", "3. ナイト会員", "4. ホリデー会員"], "correct": 2, "tip_en": "<strong>Teacher's Tip: Time slot matching!</strong><br>Weekday evening (19:00-21:00) falls under '平日 17:00〜22:00' = ナイト会員 (7,000円) -> Option 3.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: වේලාව බලන්න!</strong><br>සති දින රාත්‍රී (19:00-21:00) යනු '平日 17:00〜22:00' (ナイト会員) වේ."}, {"id": 58, "category": "info", "category_name": "情報検索 (Info Search)", "passage": "<strong>【コンサート チケット案内】</strong><br>日時：12月25日（水）開場 17:30 / 開演 18:30<br>料金：指定席 6,000円 / 自由席 4,500円<br>【購入方法】<br>・WEB購入：クレジットカード決済（手数料 無料）<br>・コンビニ購入：レジで現金支払い（手数料 1枚につき200円）", "vocab": [{"word": "開場 (かいじょう)", "en": "doors open", "si": "දොරවල් විවෘත කිරීම"}, {"word": "開演 (かいえん)", "en": "performance starts", "si": "ප්‍රදර්ශනය ආරම්භය"}], "question": "自由席の チケットを コンビニで 2枚 買います。合計で いくら 払いますか。", "options": ["1. 9,000円", "2. 9,400円", "3. 12,000円", "4. 12,400円"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Ticket + Service Fee Sum!</strong><br>Unreserved ticket (自由席) = 4,500円 x 2 = 9,000円. Convenience fee = 200円 x 2 = 400円. Total = 9,400円 (Option 2).", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: ටිකට් + සේවා ගාස්තුව!</strong><br>ටිකට් 4,500円 x 2 = 9,000円. සේවා ගාස්තුව 200円 x 2 = 400円. එකතුව 9,400円."}, {"id": 59, "category": "info", "category_name": "情報検索 (Info Search)", "passage": "<strong>【休日 診療（しんりょう）クリニック】</strong><br>日曜・祝日 応急診療（9:00〜17:00）<br>※受付は 16:30までです。<br>※必ず 保険証（ほけんしょう）を 持参してください。現金のみ対応。<br>※熱が 38.5度以上ある方は、事前に 電話でお知らせください。", "vocab": [{"word": "診療 (しんりょう)", "en": "medical care / clinic", "si": "වෛද්‍ය ප්‍රතිකාර"}, {"word": "持参 (じさん)", "en": "bring along", "si": "රැගෙන ඒම"}], "question": "日曜日の 午後4時に 診療所へ 行くとき、注意しなければならないことは 何ですか。", "options": ["1. クレジットカードで 払わなければならない", "2. 保険証を 持っていかなければならない", "3. 受付は 午後5時までできる", "4. 事前予約が 必要である"], "correct": 1, "tip_en": "<strong>Teacher's Tip: Requirement Scan '必ず'!</strong><br>'必ず 保険証を 持参してください' -> Option 2.", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: '必ず' (අනිවාර්යයෙන්ම)!</strong><br>අනිවාර්යයෙන්ම රක්ෂණ කාඩ්පත (保険証) ගෙන යා යුතුය."}, {"id": 60, "category": "info", "category_name": "情報検索 (Info Search)", "passage": "<strong>【ホテル 朝食バイキング案内】</strong><br>営業時間：6:30〜10:00（最終入場 9:30）<br>料金：大人（中学生以上）2,200円 / 小学生 1,100円 / 6歳未満 無料<br>※宿泊者以外の方も ご利用いただけます。", "vocab": [{"word": "バイキング", "en": "buffet", "si": "බුෆේ කෑම"}, {"word": "未満 (みまん)", "en": "under age", "si": "අඩු වයස්"}], "question": "ホテルに 泊まっていない 人が、8時に 5才の子どもと 一緒に 朝食を食べます。いくらですか。", "options": ["1. 無料", "2. 1,100円", "3. 2,200円", "4. 3,300円"], "correct": 2, "tip_en": "<strong>Teacher's Tip: Under-6 Free Rule & Non-guest allowance!</strong><br>Non-guests ARE allowed. Adult = 2,200円. Child (5yo, under 6) = FREE! Total = 2,200円 (Option 3).", "tip_si": "<strong>ගුරුවරයාගේ ඉඟිය: අවුරුදු 6ට අඩු නිදහස්!</strong><br>හෝටලයේ නැවතී නැති අයටද පුළුවන්. වැඩිහිටි 2,200円 + අවු. 5 ළමයා නොමිලේ = 2,200円."}];
+    let userAnswers = {};
+
+    function renderApp() {
+        const jumpContainer = document.getElementById('jump-buttons-container');
+        const qWrapper = document.getElementById('questions-wrapper');
+        
+        jumpContainer.innerHTML = '';
+        qWrapper.innerHTML = '';
+        
+        questionsData.forEach((q) => {
+            const jBtn = document.createElement('div');
+            jBtn.className = 'jump-btn';
+            jBtn.id = 'jump-btn-' + q.id;
+            jBtn.innerText = q.id;
+            jBtn.onclick = () => {
+                document.getElementById('q-card-' + q.id).scrollIntoView({ behavior: 'smooth', block: 'center' });
+            };
+            jumpContainer.appendChild(jBtn);
+            
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = 'q-card-' + q.id;
+            card.setAttribute('data-category', q.category);
+            
+            let vocabHtml = '';
+            if(q.vocab && q.vocab.length > 0) {
+                vocabHtml = `
+                    <div class="vocab-box">
+                        <h5>📚 単語・表現 (Vocabulary & Key Phrases)</h5>
+                        <ul>
+                            ` + q.vocab.map(v => `<li><strong>` + v.word + `</strong>: ` + v.en + ` / ` + v.si + `</li>`).join('') + `
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            let optionsHtml = q.options.map((opt, optIdx) => `
+                <li onclick="selectOption(` + q.id + `, ` + optIdx + `, ` + q.correct + `)">` + opt + `</li>
+            `).join('');
+            
+            card.innerHTML = `
+                <div class="question-header">
+                    <span class="q-badge">Q` + q.id + `</span>
+                    <span class="cat-tag">` + q.category_name + `</span>
+                </div>
+                <div class="passage-box">` + q.passage + `</div>
+                ` + vocabHtml + `
+                <div class="q-text">` + q.question + `</div>
+                <ul class="options-list" id="opts-q-` + q.id + `">
+                    ` + optionsHtml + `
+                </ul>
+                <button class="expl-btn" onclick="toggleExpl(` + q.id + `)">💡 解説とテクニック (Explanation)</button>
+                <div class="expl-box" id="expl-box-` + q.id + `">
+                    <div class="lang-tabs">
+                        <button class="tab-btn active" onclick="switchLang(` + q.id + `, 'en')">🇬🇧 English</button>
+                        <button class="tab-btn" onclick="switchLang(` + q.id + `, 'si')">🇱🇰 Sinhala</button>
+                    </div>
+                    <div class="tab-content active" id="expl-en-` + q.id + `">
+                        <div class="tip-card">` + q.tip_en + `</div>
+                    </div>
+                    <div class="tab-content" id="expl-si-` + q.id + `">
+                        <div class="tip-card">` + q.tip_si + `</div>
+                    </div>
+                </div>
+            `;
+            qWrapper.appendChild(card);
+        });
+    }
+
+    function selectOption(qId, selectedIdx, correctIdx) {
+        const optsList = document.getElementById('opts-q-' + qId).children;
+        const jumpBtn = document.getElementById('jump-btn-' + qId);
+        
+        for(let i=0; i<optsList.length; i++) {
+            optsList[i].style.borderColor = '#e2e8f0';
+            optsList[i].style.background = '#ffffff';
+            optsList[i].style.color = '#334155';
+            optsList[i].innerText = optsList[i].innerText.replace(' ❌', '').replace(' ✅', '');
+        }
+        
+        if(selectedIdx === correctIdx) {
+            optsList[selectedIdx].style.borderColor = '#10b981';
+            optsList[selectedIdx].style.background = '#ecfdf5';
+            optsList[selectedIdx].style.color = '#065f46';
+            optsList[selectedIdx].innerText += ' ✅';
+            jumpBtn.className = 'jump-btn correct';
+            userAnswers[qId] = true;
+        } else {
+            optsList[selectedIdx].style.borderColor = '#ef4444';
+            optsList[selectedIdx].style.background = '#fef2f2';
+            optsList[selectedIdx].style.color = '#991b1b';
+            optsList[selectedIdx].innerText += ' ❌';
+            jumpBtn.className = 'jump-btn wrong';
+            userAnswers[qId] = false;
+        }
+        
+        updateScore();
+    }
+
+    function updateScore() {
+        const correctCount = Object.values(userAnswers).filter(v => v === true).length;
+        document.getElementById('score-counter').innerText = '正解数: ' + correctCount + ' / 60';
+    }
+
+    function toggleExpl(qId) {
+        const box = document.getElementById('expl-box-' + qId);
+        box.classList.toggle('active');
+    }
+
+    function switchLang(qId, lang) {
+        const box = document.getElementById('expl-box-' + qId);
+        box.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        box.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        
+        document.getElementById('expl-' + lang + '-' + qId).classList.add('active');
+        box.querySelector('button[onclick*="' + lang + '"]').classList.add('active');
+    }
+
+    function filterCategory(cat, ev) {
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        if(ev) ev.target.classList.add('active');
+        
+        const cards = document.getElementById('questions-wrapper').querySelectorAll('.question-card');
+        cards.forEach(card => {
+            if(cat === 'all' || card.getAttribute('data-category') === cat) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    renderApp();
+</script>
+
+</body>
+</html>

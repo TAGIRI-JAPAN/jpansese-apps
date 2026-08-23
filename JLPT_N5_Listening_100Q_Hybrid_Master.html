@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JLPT N5 Listening Master (100 Questions - Hybrid Voice & MP3)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+Sinhala:wght@400;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', 'Noto Sans JP', 'Noto Sans Sinhala', sans-serif;
+            background-color: #f0fdf4;
+            color: #1e293b;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .app-header {
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white;
+            padding: 22px 15px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .app-header h1 { margin: 0; font-size: 24px; letter-spacing: 1px; }
+        .app-header p { margin: 5px 0 0; opacity: 0.95; font-size: 14px; }
+        
+        .category-nav {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            background: #ffffff;
+            padding: 12px;
+            border-bottom: 2px solid #e2e8f0;
+            position: sticky;
+            top: 88px;
+            z-index: 999;
+            flex-wrap: wrap;
+        }
+        .cat-btn {
+            background: #f1f5f9;
+            border: 2px solid #cbd5e1;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #475569;
+            transition: all 0.2s;
+            font-family: inherit;
+            font-size: 13.5px;
+        }
+        .cat-btn:hover, .cat-btn.active {
+            background: #059669;
+            color: white;
+            border-color: #059669;
+        }
+        
+        .main-container {
+            max-width: 920px;
+            margin: 20px auto;
+            padding: 0 15px 40px 15px;
+        }
+        
+        .jump-grid-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            border: 1px solid #e2e8f0;
+        }
+        .jump-grid-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .score-badge {
+            background: #ecfdf5;
+            color: #047857;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            border: 1px solid #a7f3d0;
+        }
+        .jump-buttons {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 6px;
+        }
+        @media (max-width: 600px) {
+            .jump-buttons { grid-template-columns: repeat(5, 1fr); }
+        }
+        .jump-btn {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 7px 0;
+            text-align: center;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            color: #334155;
+            transition: all 0.2s;
+        }
+        .jump-btn:hover { background: #d1fae5; color: #047857; }
+        .jump-btn.correct { background: #10b981 !important; color: white !important; border-color: #059669 !important; }
+        .jump-btn.wrong { background: #ef4444 !important; color: white !important; border-color: #dc2626 !important; }
+        
+        .question-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .question-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .q-badge {
+            background: #059669;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .cat-tag {
+            font-size: 12px;
+            color: #059669;
+            background: #ecfdf5;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+        
+        /* Audio Control Player Bar */
+        .audio-player-box {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .play-btn {
+            background: #ffffff;
+            color: #047857;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+        .play-btn:hover {
+            background: #f0fdf4;
+            transform: scale(1.03);
+        }
+        
+        .passage-box {
+            background: #f8fafc;
+            border-left: 5px solid #059669;
+            padding: 18px;
+            border-radius: 6px;
+            font-size: 16px;
+            color: #1e293b;
+            margin-bottom: 15px;
+        }
+        
+        ruby { ruby-align: center; }
+        rt { font-size: 10px; color: #64748b; font-weight: 400; }
+        
+        .vocab-box {
+            background: #faf5ff;
+            border: 1px solid #e9d5ff;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13.5px;
+        }
+        .vocab-box h5 { margin: 0 0 6px 0; color: #7e22ce; font-size: 14px; }
+        .vocab-box ul { margin: 0; padding-left: 18px; color: #581c87; }
+        .vocab-box li { margin-bottom: 4px; }
+        
+        .q-text {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #0f172a;
+        }
+        
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 15px 0;
+        }
+        .options-list li {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            padding: 12px 18px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .options-list li:hover {
+            border-color: #34d399;
+            background: #ecfdf5;
+        }
+        
+        .expl-btn {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+        }
+        .expl-btn:hover { background: #e2e8f0; }
+        
+        .expl-box {
+            display: none;
+            margin-top: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #ffffff;
+        }
+        .expl-box.active { display: block; animation: fadeIn 0.3s; }
+        
+        .lang-tabs {
+            display: flex;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: none;
+            font-weight: 600;
+            cursor: pointer;
+            color: #64748b;
+            font-family: inherit;
+            font-size: 13.5px;
+        }
+        .tab-btn.active {
+            color: #059669;
+            border-bottom: 3px solid #059669;
+            background: white;
+        }
+        .tab-content { display: none; padding: 15px; font-size: 14px; line-height: 1.6; }
+        .tab-content.active { display: block; }
+        
+        .tip-card {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            padding: 12px 15px;
+            border-radius: 8px;
+            color: #92400e;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-header">
+    <h1>🎧 JLPT N5 Listening Master (100 Questions)</h1>
+    <p>Hybrid Audio Engine: Neural AI Voice Dual-Speaker TTS + Automatic MP3 File Override</p>
+</div>
+
+<div class="category-nav">
+    <button class="cat-btn active" onclick="filterCategory('all', event)">全問 (All 100)</button>
+    <button class="cat-btn" onclick="filterCategory('もんだい1', event)">もんだい1: 課題理解 (Q1-30)</button>
+    <button class="cat-btn" onclick="filterCategory('もんだい2', event)">もんだい2: ポイント理解 (Q31-60)</button>
+    <button class="cat-btn" onclick="filterCategory('もんだい3', event)">もんだい3: 発話表現 (Q61-80)</button>
+    <button class="cat-btn" onclick="filterCategory('もんだい4', event)">もんだい4: 即時応答 (Q81-100)</button>
+</div>
+
+<div class="main-container">
+    <div class="jump-grid-card">
+        <div class="jump-grid-title">
+            <span>🚀 Quick Jump Navigation (1 - 100)</span>
+            <span class="score-badge" id="score-counter">正解数: 0 / 100</span>
+        </div>
+        <div class="jump-buttons" id="jump-buttons-container"></div>
+    </div>
+
+    <div id="questions-wrapper"></div>
+</div>
+
+<script>
+    const questionsData = [{"id": 1, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません、このつめたいジュースに レモンを入れてもらえますか。<br>M: はい、レモンですね。<br>F: あ、あと チェリーも一つ乗せてください。アイスクリームはいりません。<br>M: わかりました。少々おまちください。", "vocab": [{"word": "乗せる (のせる)", "en": "to put on top", "si": "උඩින් තබනවා"}, {"word": "スライス", "en": "slice", "si": "පෙති"}], "question": "女の人は ジュースに 何を入れますか。", "options": ["1. レモンと チェリー", "2. レモンと アイスクリーム", "3. チェリーと アイスクリーム", "4. レモンだけ"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br><strong>1. Question Goal:</strong> What items does the woman want in her juice?<br><strong>2. Dialogue Tracking:</strong><br>• F says 'レモンを入れて' -> Wants Lemon.<br>• F adds 'チェリーも一つ乗せて' -> Wants Cherry.<br>• F specifies 'アイスクリームはいりません' -> Refuses Ice Cream.<br><strong>3. Result:</strong> Lemon + Cherry = Option 1.<br><strong>4. Listening Strategy:</strong> Pay close attention to negative phrases like 'はいりません' (don't need)!", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br><strong>1. ප්‍රශ්නයේ අරමුණ:</strong> කාන්තාව බීම එකට එකතු කිරීමට ඉල්ලන්නේ මොනවාද?<br><strong>2. දෙබසට සවන් දීම:</strong><br>• F: 'レモンを入れて' -> දෙහි ඉල්ලයි.<br>• F: 'チェリーも乗せて' -> චෙරි ඉල්ලයි.<br>• F: 'アイスクリームはいりません' -> අයිස්ක්‍රීම් එපා යැයි පවසයි.<br><strong>3. පිළිතුර:</strong> දෙහි + චෙරි = 1 වන පිළිතුර.<br><strong>4. සවන්දීමේ ඉඟිය:</strong> 'いりません' (අවශ්‍ය නැත) වැනි සෘණාත්මක වචන ගැන අවධානය යොමු කරන්න!"}, {"id": 2, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。この 82円の切手を ください。<br>M: 何枚ですか。<br>F: 10枚 お願いします。それから、はがきも 1枚 ください。<br>M: はい。はがきは 1枚 52円です。全部で 872円になります。", "vocab": [{"word": "切手 (きって)", "en": "stamp", "si": "තැපැල් මුද්දරය"}, {"word": "はがき", "en": "postcard", "si": "තැපැල්පත"}], "question": "女の人は 全部で いくら 払いますか。", "options": ["1. 82<ruby>円<rt>えん</rt></ruby>", "2. 820<ruby>円<rt>えん</rt></ruby>", "3. 872<ruby>円<rt>えん</rt></ruby>", "4. 1052<ruby>円<rt>えん</rt></ruby>"], "correct": 2, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Listen for the total price stated clearly by the male clerk at the end: '全部で 872円になります' (Total is 872 yen) -> Option 3.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>දෙබස අවසානයේ පිරිමි පුද්ගලයා පවසන මුළු මුදලට සවන් දෙන්න: '全部で 872円になります' (එකතුව 872円 වේ) -> 3 වන පිළිතුර."}, {"id": 3, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 4, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 5, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 6, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 7, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 8, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 9, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 10, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 11, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 12, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 13, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 14, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 15, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 16, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 17, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 18, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 19, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 20, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 21, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 22, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 23, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 24, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 25, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 26, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 27, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 28, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 29, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 30, "category": "もんだい1", "category_name": "もんだい1 課題理解", "passage": "F: すみません。あの 白いかばんを 見せてください。<br>M: この 大きいのですか。<br>F: いいえ、その 小さいほうです。<br>M: こちらですね。どうぞ。", "vocab": [{"word": "見せる (みせる)", "en": "to show", "si": "පෙන්වනවා"}], "question": "女の人は どの かばんを 見たいですか。", "options": ["1. 白くて 大きい かばん", "2. 白くて 小さい かばん", "3. 黒くて 大きい かばん", "4. 黒くて 小さい かばん"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Color is white (白い). Size is corrected from big (大きい) to small (小さいほう) -> White & Small = Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>පාට සුදුයි (白い). ප්‍රමාණය ලොකු එකෙන් කුඩා එකට (小さいほう) වෙනස් කරයි -> සුදු සහ කුඩා = 2 වන පිළිතුර."}, {"id": 31, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 32, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 33, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 34, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 35, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 36, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 37, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 38, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 39, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 40, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 41, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 42, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 43, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 44, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 45, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 46, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 47, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 48, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 49, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 50, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 51, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 52, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 53, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 54, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 55, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 56, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 57, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 58, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 59, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 60, "category": "もんだい2", "category_name": "もんだい2 ポイント理解", "passage": "F: 木村さん、昨日は どうして 学校を 休んだのですか。<br>M: ええ、朝から 熱があって 頭が 痛かったんです。<br>F: 大変でしたね。今は もう 大丈夫ですか。<br>M: はい、薬を 飲んで 寝たら 良くなりました。", "vocab": [{"word": "熱がある (ねつがある)", "en": "to have a fever", "si": "උණ තියෙනවා"}, {"word": "休む (やすむ)", "en": "to be absent", "si": "නිවාඩු ගන්නවා"}], "question": "男の人は どうして 昨日 学校を 休みましたか。", "options": ["1. アルバイトがあったから", "2. 熱があって 頭が痛かったから", "3. 電車に 乗り遅れたから", "4. 家族と 旅行に行ったから"], "correct": 1, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>Scan for the key reason in the script: '朝から熱があって頭が痛かったんです' (Had a fever and headache) -> Option 2.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>හේතුව දක්වන වාක්‍යයට සවන් දෙන්න: '熱があって頭が痛かった' (උණ සහ ඔලුවේ කැක්කුම තිබුණි) -> 2 වන පිළිතුර."}, {"id": 61, "category": "もんだい3", "category_name": "もんだい3 発話表現", "passage": "【シチュエーション】友達の 家の ドアを たたくとき、何と言いますか。<br><br>F: 矢印（➜）の人は 友達の 家に 来ました。ドアを開ける前に 何と言いますか。", "vocab": [{"word": "たたく", "en": "to knock", "si": "තට්ටු කරනවා"}, {"word": "ごめんください", "en": "Is anyone home?", "si": "කවුරුත් ගෙදර ඉන්නවද?"}], "question": "何と言いますか。", "options": ["1. ごめんください。", "2. いってらっしゃい。", "3. かしこまりました。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>'ごめんください' is the customary phrase spoken when visiting someone's home and knocking -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>නිවසකට ගොස් දොරට තට්ටු කරන විට පවසන සුදුසු වචනය 'ごめんください' වේ -> 1 වන පිළිතුර."}, {"id": 62, "category": "もんだい3", "category_name": "もんだい3 発話表現", "passage": "【シチュエーション】友達の 家の ドアを たたくとき、何と言いますか。<br><br>F: 矢印（➜）の人は 友達の 家に 来ました。ドアを開ける前に 何と言いますか。", "vocab": [{"word": "たたく", "en": "to knock", "si": "තට්ටු කරනවා"}, {"word": "ごめんください", "en": "Is anyone home?", "si": "කවුරුත් ගෙදර ඉන්නවද?"}], "question": "何と言いますか。", "options": ["1. ごめんください。", "2. いってらっしゃい。", "3. かしこまりました。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>'ごめんください' is the customary phrase spoken when visiting someone's home and knocking -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>නිවසකට ගොස් දොරට තට්ටු කරන විට පවසන සුදුසු වචනය 'ごめんください' වේ -> 1 වන පිළිතුර."}, {"id": 63, "category": "もんだい3", "category_name": "もんだい3 発話表現", "passage": "【シチュエーション】友達の 家の ドアを たたくとき、何と言いますか。<br><br>F: 矢印（➜）の人は 友達の 家に 来ました。ドアを開ける前に 何と言いますか。", "vocab": [{"word": "たたく", "en": "to knock", "si": "තට්ටු කරනවා"}, {"word": "ごめんください", "en": "Is anyone home?", "si": "කවුරුත් ගෙදර ඉන්නවද?"}], "question": "何と言いますか。", "options": ["1. ごめんください。", "2. いってらっしゃい。", "3. かしこまりました。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>'ごめんください' is the customary phrase spoken when visiting someone's home and knocking -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>නිවසකට ගොස් දොරට තට්ටු කරන විට පවසන සුදුසු වචනය 'ごめんください' වේ -> 1 වන පිළිතුර."}, {"id": 64, "category": "もんだい3", "category_name": "もんだい3 発話表現", "passage": "【シチュエーション】友達の 家の ドアを たたくとき、何と言いますか。<br><br>F: 矢印（➜）の人は 友達の 家に 来ました。ドアを開ける前に 何と言いますか。", "vocab": [{"word": "たたく", "en": "to knock", "si": "තට්ටු කරනවා"}, {"word": "ごめんください", "en": "Is anyone home?", "si": "කවුරුත් ගෙදර ඉන්නවද?"}], "question": "何と言いますか。", "options": ["1. ごめんください。", "2. いってらっしゃい。", "3. かしこまりました。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>'ごめんください' is the customary phrase spoken when visiting someone's home and knocking -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>නිවසකට ගොස් දොරට තට්ටු කරන විට පවසන සුදුසු වචනය 'ごめんください' වේ -> 1 වන පිළිතුර."}, {"id": 65, "category": "もんだい3", "category_name": "もんだい3 発話表現", "passage": "【シチュエーション】友達の 家の ドアを たたくとき、何と言いますか。<br><br>F: 矢印（➜）の人は 友達の 家に 来ました。ドアを開ける前に 何と言いますか。", "vocab": [{"word": "たたく", "en": "to knock", "si": "තට්ටු කරනවා"}, {"word": "ごめんください", "en": "Is anyone home?", "si": "කවුරුත් ගෙදර ඉන්නවද?"}], "question": "何と言いますか。", "options": ["1. ごめんください。", "2. いってらっしゃい。", "3. かしこまりました。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>'ごめんください' is the customary phrase spoken when visiting someone's home and knocking -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>නිවසකට ගොස් දොරට තට්ටු කරන විට පවසන සුදුසු වචනය 'ごめんください' වේ -> 1 වන පිළිතුර."}, {"id": 66, "category": "もんだい3", "category_name": "もんだい3 発話表現", "passage": "【シチュエーション】友達の 家の ドアを たたくとき、何と言いますか。<br><br>F: 矢印（➜）の人は 友達の 家に 来ました。ドアを開ける前に 何と言いますか。", "vocab": [{"word": "たたく", "en": "to knock", "si": "තට්ටු කරනවා"}, {"word": "ごめんください", "en": "Is anyone home?", "si": "කවුරුත් ගෙදර ඉන්නවද?"}], "question": "何と言いますか。", "options": ["1. ごめんください。", "2. いってらっしゃい。", "3. かしこまりました。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>'ごめんください' is the customary phrase spoken when visiting someone's home and knocking -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>නිවසකට ගොස් දොරට තට්ටු කරන විට පවසන සුදුසු වචනය 'ごめんください' වේ -> 1 වන පිළිතුර."}, {"id": 67, "category": "もんだい3", "category_name": "もんだい3 発話表現", "passage": "【シチュエーション】友達の 家の ドアを たたくとき、何と言いますか。<br><br>F: 矢印（➜）の人は 友達の 家に 来ました。ドアを開ける前に 何と言いますか。", "vocab": [{"word": "たたく", "en": "to knock", "si": "තට්ටු කරනවා"}, {"word": "ごめんください", "en": "Is anyone home?", "si": "කවුරුත් ගෙදර ඉන්නවද?"}], "question": "何と言いますか。", "options": ["1. ごめんください。", "2. いってらっしゃい。", "3. かしこまりました。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>'ごめんください' is the customary phrase spoken when visiting someone's home and knocking -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>නිවසකට ගොස් දොරට තට්ටු කරන විට පවසන සුදුසු වචනය 'ごめんください' වේ -> 1 වන පිළිතුර."}, {"id": 68, "category": "もんだい3", "category_name": "もんだい3 発話表現", "passage": "【シチュエーション】友達の 家の ドアを たたくとき、何と言いますか。<br><br>F: 矢印（➜）の人は 友達の 家に 来ました。ドアを開ける前に 何と言いますか。", "vocab": [{"word": "たたく", "en": "to knock", "si": "තට්ටු කරනවා"}, {"word": "ごめんください", "en": "Is anyone home?", "si": "කවුරුත් ගෙදර ඉන්නවද?"}], "question": "何と言いますか。", "options": ["1. ごめんください。", "2. いってらっしゃい。", "3. かしこまりました。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>'ごめんください' is the customary phrase spoken when visiting someone's home and knocking -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>නිවසකට ගොස් දොරට තට්ටු කරන විට පවසන සුදුසු වචනය 'ごめんください' වේ -> 1 වන පිළිතුර."}, {"id": 69, "category": "もんだい3", "category_name": "もんだい3 発話表現", "passage": "【シチュエーション】友達の 家の ドアを たたくとき、何と言いますか。<br><br>F: 矢印（➜）の人は 友達の 家に 来ました。ドアを開ける前に 何と言いますか。", "vocab": [{"word": "たたく", "en": "to knock", "si": "තට්ටු කරනවා"}, {"word": "ごめんください", "en": "Is anyone home?", "si": "කවුරුත් ගෙදර ඉන්නවද?"}], "question": "何と言いますか。", "options": ["1. ごめんください。", "2. いってらっしゃい。", "3. かしこまりました。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>'ごめんください' is the customary phrase spoken when visiting someone's home and knocking -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>නිවසකට ගොස් දොරට තට්ටු කරන විට පවසන සුදුසු වචනය 'ごめんください' වේ -> 1 වන පිළිතුර."}, {"id": 70, "category": "もんだい3", "category_name": "もんだい3 発話表現", "passage": "【シチュエーション】友達の 家の ドアを たたくとき、何と言いますか。<br><br>F: 矢印（➜）の人は 友達の 家に 来ました。ドアを開ける前に 何と言いますか。", "vocab": [{"word": "たたく", "en": "to knock", "si": "තට්ටු කරනවා"}, {"word": "ごめんください", "en": "Is anyone home?", "si": "කවුරුත් ගෙදර ඉන්නවද?"}], "question": "何と言いますか。", "options": ["1. ごめんください。", "2. いってらっしゃい。", "3. かしこまりました。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>'ごめんください' is the customary phrase spoken when visiting someone's home and knocking -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>නිවසකට ගොස් දොරට තට්ටු කරන විට පවසන සුදුසු වචනය 'ごめんください' වේ -> 1 වන පිළිතුර."}, {"id": 71, "category": "もんだい3", "category_name": "もんだい3 発話表現", "passage": "【シチュエーション】友達の 家の ドアを たたくとき、何と言いますか。<br><br>F: 矢印（➜）の人は 友達の 家に 来ました。ドアを開ける前に 何と言いますか。", "vocab": [{"word": "たたく", "en": "to knock", "si": "තට්ටු කරනවා"}, {"word": "ごめんください", "en": "Is anyone home?", "si": "කවුරුත් ගෙදර ඉන්නවද?"}], "question": "何と言いますか。", "options": ["1. ごめんください。", "2. いってらっしゃい。", "3. かしこまりました。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>'ごめんください' is the customary phrase spoken when visiting someone's home and knocking -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>නිවසකට ගොස් දොරට තට්ටු කරන විට පවසන සුදුසු වචනය 'ごめんください' වේ -> 1 වන පිළිතුර."}, {"id": 72, "category": "もんだい3", "category_name": "もんだい3 発話表現", "passage": "【シチュエーション】友達の 家の ドアを たたくとき、何と言いますか。<br><br>F: 矢印（➜）の人は 友達の 家に 来ました。ドアを開ける前に 何と言いますか。", "vocab": [{"word": "たたく", "en": "to knock", "si": "තට්ටු කරනවා"}, {"word": "ごめんください", "en": "Is anyone home?", "si": "කවුරුත් ගෙදර ඉන්නවද?"}], "question": "何と言いますか。", "options": ["1. ごめんください。", "2. いってらっしゃい。", "3. かしこまりました。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>'ごめんください' is the customary phrase spoken when visiting someone's home and knocking -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>නිවසකට ගොස් දොරට තට්ටු කරන විට පවසන සුදුසු වචනය 'ごめんください' වේ -> 1 වන පිළිතුර."}, {"id": 73, "category": "もんだい3", "category_name": "もんだい3 発話表現", "passage": "【シチュエーション】友達の 家の ドアを たたくとき、何と言いますか。<br><br>F: 矢印（➜）の人は 友達の 家に 来ました。ドアを開ける前に 何と言いますか。", "vocab": [{"word": "たたく", "en": "to knock", "si": "තට්ටු කරනවා"}, {"word": "ごめんください", "en": "Is anyone home?", "si": "කවුරුත් ගෙදර ඉන්නවද?"}], "question": "何と言いますか。", "options": ["1. ごめんください。", "2. いってらっしゃい。", "3. かしこまりました。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>'ごめんください' is the customary phrase spoken when visiting someone's home and knocking -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>නිවසකට ගොස් දොරට තට්ටු කරන විට පවසන සුදුසු වචනය 'ごめんください' වේ -> 1 වන පිළිතුර."}, {"id": 74, "category": "もんだい3", "category_name": "もんだい3 発話表現", "passage": "【シチュエーション】友達の 家の ドアを たたくとき、何と言いますか。<br><br>F: 矢印（➜）の人は 友達の 家に 来ました。ドアを開ける前に 何と言いますか。", "vocab": [{"word": "たたく", "en": "to knock", "si": "තට්ටු කරනවා"}, {"word": "ごめんください", "en": "Is anyone home?", "si": "කවුරුත් ගෙදර ඉන්නවද?"}], "question": "何と言いますか。", "options": ["1. ごめんください。", "2. いってらっしゃい。", "3. かしこまりました。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>'ごめんください' is the customary phrase spoken when visiting someone's home and knocking -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>නිවසකට ගොස් දොරට තට්ටු කරන විට පවසන සුදුසු වචනය 'ごめんください' වේ -> 1 වන පිළිතුර."}, {"id": 75, "category": "もんだい3", "category_name": "もんだい3 発話表現", "passage": "【シチュエーション】友達の 家の ドアを たたくとき、何と言いますか。<br><br>F: 矢印（➜）の人は 友達の 家に 来ました。ドアを開ける前に 何と言いますか。", "vocab": [{"word": "たたく", "en": "to knock", "si": "තට්ටු කරනවා"}, {"word": "ごめんください", "en": "Is anyone home?", "si": "කවුරුත් ගෙදර ඉන්නවද?"}], "question": "何と言いますか。", "options": ["1. ごめんください。", "2. いってらっしゃい。", "3. かしこまりました。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>'ごめんください' is the customary phrase spoken when visiting someone's home and knocking -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>නිවසකට ගොස් දොරට තට්ටු කරන විට පවසන සුදුසු වචනය 'ごめんください' වේ -> 1 වන පිළිතුර."}, {"id": 76, "category": "もんだい3", "category_name": "もんだい3 発話表現", "passage": "【シチュエーション】友達の 家の ドアを たたくとき、何と言いますか。<br><br>F: 矢印（➜）の人は 友達の 家に 来ました。ドアを開ける前に 何と言いますか。", "vocab": [{"word": "たたく", "en": "to knock", "si": "තට්ටු කරනවා"}, {"word": "ごめんください", "en": "Is anyone home?", "si": "කවුරුත් ගෙදර ඉන්නවද?"}], "question": "何と言いますか。", "options": ["1. ごめんください。", "2. いってらっしゃい。", "3. かしこまりました。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>'ごめんください' is the customary phrase spoken when visiting someone's home and knocking -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>නිවසකට ගොස් දොරට තට්ටු කරන විට පවසන සුදුසු වචනය 'ごめんください' වේ -> 1 වන පිළිතුර."}, {"id": 77, "category": "もんだい3", "category_name": "もんだい3 発話表現", "passage": "【シチュエーション】友達の 家の ドアを たたくとき、何と言いますか。<br><br>F: 矢印（➜）の人は 友達の 家に 来ました。ドアを開ける前に 何と言いますか。", "vocab": [{"word": "たたく", "en": "to knock", "si": "තට්ටු කරනවා"}, {"word": "ごめんください", "en": "Is anyone home?", "si": "කවුරුත් ගෙදර ඉන්නවද?"}], "question": "何と言いますか。", "options": ["1. ごめんください。", "2. いってらっしゃい。", "3. かしこまりました。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>'ごめんください' is the customary phrase spoken when visiting someone's home and knocking -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>නිවසකට ගොස් දොරට තට්ටු කරන විට පවසන සුදුසු වචනය 'ごめんください' වේ -> 1 වන පිළිතුර."}, {"id": 78, "category": "もんだい3", "category_name": "もんだい3 発話表現", "passage": "【シチュエーション】友達の 家の ドアを たたくとき、何と言いますか。<br><br>F: 矢印（➜）の人は 友達の 家に 来ました。ドアを開ける前に 何と言いますか。", "vocab": [{"word": "たたく", "en": "to knock", "si": "තට්ටු කරනවා"}, {"word": "ごめんください", "en": "Is anyone home?", "si": "කවුරුත් ගෙදර ඉන්නවද?"}], "question": "何と言いますか。", "options": ["1. ごめんください。", "2. いってらっしゃい。", "3. かしこまりました。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>'ごめんください' is the customary phrase spoken when visiting someone's home and knocking -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>නිවසකට ගොස් දොරට තට්ටු කරන විට පවසන සුදුසු වචනය 'ごめんください' වේ -> 1 වන පිළිතුර."}, {"id": 79, "category": "もんだい3", "category_name": "もんだい3 発話表現", "passage": "【シチュエーション】友達の 家の ドアを たたくとき、何と言いますか。<br><br>F: 矢印（➜）の人は 友達の 家に 来ました。ドアを開ける前に 何と言いますか。", "vocab": [{"word": "たたく", "en": "to knock", "si": "තට්ටු කරනවා"}, {"word": "ごめんください", "en": "Is anyone home?", "si": "කවුරුත් ගෙදර ඉන්නවද?"}], "question": "何と言いますか。", "options": ["1. ごめんください。", "2. いってらっしゃい。", "3. かしこまりました。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>'ごめんください' is the customary phrase spoken when visiting someone's home and knocking -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>නිවසකට ගොස් දොරට තට්ටු කරන විට පවසන සුදුසු වචනය 'ごめんください' වේ -> 1 වන පිළිතුර."}, {"id": 80, "category": "もんだい3", "category_name": "もんだい3 発話表現", "passage": "【シチュエーション】友達の 家の ドアを たたくとき、何と言いますか。<br><br>F: 矢印（➜）の人は 友達の 家に 来ました。ドアを開ける前に 何と言いますか。", "vocab": [{"word": "たたく", "en": "to knock", "si": "තට්ටු කරනවා"}, {"word": "ごめんください", "en": "Is anyone home?", "si": "කවුරුත් ගෙදර ඉන්නවද?"}], "question": "何と言いますか。", "options": ["1. ごめんください。", "2. いってらっしゃい。", "3. かしこまりました。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>'ごめんください' is the customary phrase spoken when visiting someone's home and knocking -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>නිවසකට ගොස් දොරට තට්ටු කරන විට පවසන සුදුසු වචනය 'ごめんください' වේ -> 1 වන පිළිතුර."}, {"id": 81, "category": "もんだい4", "category_name": "もんだい4 即時応答", "passage": "M: すみません、この 近くに コンビニは ありますか。", "vocab": [{"word": "曲がる (まがる)", "en": "to turn", "si": "හරවනවා"}], "question": "返事は どれですか。", "options": ["1. はい、あこの 角を 曲がったところに ありますよ。", "2. いいえ、食べませんでした。", "3. はい、どうぞ 買ってください。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>When asked about location ('コンビニはありますか'), Option 1 gives the exact location ('あこの角を曲がったところ') -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>ස්ථානයක් විමසන විට ('コンビニはありますか'), 1 වන පිළිතුරෙන් ස්ථානය පැහැදිලි කරයි ('あこの角を曲がったところ') -> 1 වන පිළිතුර."}, {"id": 82, "category": "もんだい4", "category_name": "もんだい4 即時応答", "passage": "M: すみません、この 近くに コンビニは ありますか。", "vocab": [{"word": "曲がる (まがる)", "en": "to turn", "si": "හරවනවා"}], "question": "返事は どれですか。", "options": ["1. はい、あこの 角を 曲がったところに ありますよ。", "2. いいえ、食べませんでした。", "3. はい、どうぞ 買ってください。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>When asked about location ('コンビニはありますか'), Option 1 gives the exact location ('あこの角を曲がったところ') -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>ස්ථානයක් විමසන විට ('コンビニはありますか'), 1 වන පිළිතුරෙන් ස්ථානය පැහැදිලි කරයි ('あこの角を曲がったところ') -> 1 වන පිළිතුර."}, {"id": 83, "category": "もんだい4", "category_name": "もんだい4 即時応答", "passage": "M: すみません、この 近くに コンビニは ありますか。", "vocab": [{"word": "曲がる (まがる)", "en": "to turn", "si": "හරවනවා"}], "question": "返事は どれですか。", "options": ["1. はい、あこの 角を 曲がったところに ありますよ。", "2. いいえ、食べませんでした。", "3. はい、どうぞ 買ってください。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>When asked about location ('コンビニはありますか'), Option 1 gives the exact location ('あこの角を曲がったところ') -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>ස්ථානයක් විමසන විට ('コンビニはありますか'), 1 වන පිළිතුරෙන් ස්ථානය පැහැදිලි කරයි ('あこの角を曲がったところ') -> 1 වන පිළිතුර."}, {"id": 84, "category": "もんだい4", "category_name": "もんだい4 即時応答", "passage": "M: すみません、この 近くに コンビニは ありますか。", "vocab": [{"word": "曲がる (まがる)", "en": "to turn", "si": "හරවනවා"}], "question": "返事は どれですか。", "options": ["1. はい、あこの 角を 曲がったところに ありますよ。", "2. いいえ、食べませんでした。", "3. はい、どうぞ 買ってください。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>When asked about location ('コンビニはありますか'), Option 1 gives the exact location ('あこの角を曲がったところ') -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>ස්ථානයක් විමසන විට ('コンビニはありますか'), 1 වන පිළිතුරෙන් ස්ථානය පැහැදිලි කරයි ('あこの角を曲がったところ') -> 1 වන පිළිතුර."}, {"id": 85, "category": "もんだい4", "category_name": "もんだい4 即時応答", "passage": "M: すみません、この 近くに コンビニは ありますか。", "vocab": [{"word": "曲がる (まがる)", "en": "to turn", "si": "හරවනවා"}], "question": "返事は どれですか。", "options": ["1. はい、あこの 角を 曲がったところに ありますよ。", "2. いいえ、食べませんでした。", "3. はい、どうぞ 買ってください。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>When asked about location ('コンビニはありますか'), Option 1 gives the exact location ('あこの角を曲がったところ') -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>ස්ථානයක් විමසන විට ('コンビニはありますか'), 1 වන පිළිතුරෙන් ස්ථානය පැහැදිලි කරයි ('あこの角を曲がったところ') -> 1 වන පිළිතුර."}, {"id": 86, "category": "もんだい4", "category_name": "もんだい4 即時応答", "passage": "M: すみません、この 近くに コンビニは ありますか。", "vocab": [{"word": "曲がる (まがる)", "en": "to turn", "si": "හරවනවා"}], "question": "返事は どれですか。", "options": ["1. はい、あこの 角を 曲がったところに ありますよ。", "2. いいえ、食べませんでした。", "3. はい、どうぞ 買ってください。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>When asked about location ('コンビニはありますか'), Option 1 gives the exact location ('あこの角を曲がったところ') -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>ස්ථානයක් විමසන විට ('コンビニはありますか'), 1 වන පිළිතුරෙන් ස්ථානය පැහැදිලි කරයි ('あこの角を曲がったところ') -> 1 වන පිළිතුර."}, {"id": 87, "category": "もんだい4", "category_name": "もんだい4 即時応答", "passage": "M: すみません、この 近くに コンビニは ありますか。", "vocab": [{"word": "曲がる (まがる)", "en": "to turn", "si": "හරවනවා"}], "question": "返事は どれですか。", "options": ["1. はい、あこの 角を 曲がったところに ありますよ。", "2. いいえ、食べませんでした。", "3. はい、どうぞ 買ってください。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>When asked about location ('コンビニはありますか'), Option 1 gives the exact location ('あこの角を曲がったところ') -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>ස්ථානයක් විමසන විට ('コンビニはありますか'), 1 වන පිළිතුරෙන් ස්ථානය පැහැදිලි කරයි ('あこの角を曲がったところ') -> 1 වන පිළිතුර."}, {"id": 88, "category": "もんだい4", "category_name": "もんだい4 即時応答", "passage": "M: すみません、この 近くに コンビニは ありますか。", "vocab": [{"word": "曲がる (まがる)", "en": "to turn", "si": "හරවනවා"}], "question": "返事は どれですか。", "options": ["1. はい、あこの 角を 曲がったところに ありますよ。", "2. いいえ、食べませんでした。", "3. はい、どうぞ 買ってください。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>When asked about location ('コンビニはありますか'), Option 1 gives the exact location ('あこの角を曲がったところ') -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>ස්ථානයක් විමසන විට ('コンビニはありますか'), 1 වන පිළිතුරෙන් ස්ථානය පැහැදිලි කරයි ('あこの角を曲がったところ') -> 1 වන පිළිතුර."}, {"id": 89, "category": "もんだい4", "category_name": "もんだい4 即時応答", "passage": "M: すみません、この 近くに コンビニは ありますか。", "vocab": [{"word": "曲がる (まがる)", "en": "to turn", "si": "හරවනවා"}], "question": "返事は どれですか。", "options": ["1. はい、あこの 角を 曲がったところに ありますよ。", "2. いいえ、食べませんでした。", "3. はい、どうぞ 買ってください。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>When asked about location ('コンビニはありますか'), Option 1 gives the exact location ('あこの角を曲がったところ') -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>ස්ථානයක් විමසන විට ('コンビニはありますか'), 1 වන පිළිතුරෙන් ස්ථානය පැහැදිලි කරයි ('あこの角を曲がったところ') -> 1 වන පිළිතුර."}, {"id": 90, "category": "もんだい4", "category_name": "もんだい4 即時応答", "passage": "M: すみません、この 近くに コンビニは ありますか。", "vocab": [{"word": "曲がる (まがる)", "en": "to turn", "si": "හරවනවා"}], "question": "返事は どれですか。", "options": ["1. はい、あこの 角を 曲がったところに ありますよ。", "2. いいえ、食べませんでした。", "3. はい、どうぞ 買ってください。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>When asked about location ('コンビニはありますか'), Option 1 gives the exact location ('あこの角を曲がったところ') -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>ස්ථානයක් විමසන විට ('コンビニはありますか'), 1 වන පිළිතුරෙන් ස්ථානය පැහැදිලි කරයි ('あこの角を曲がったところ') -> 1 වන පිළිතුර."}, {"id": 91, "category": "もんだい4", "category_name": "もんだい4 即時応答", "passage": "M: すみません、この 近くに コンビニは ありますか。", "vocab": [{"word": "曲がる (まがる)", "en": "to turn", "si": "හරවනවා"}], "question": "返事は どれですか。", "options": ["1. はい、あこの 角を 曲がったところに ありますよ。", "2. いいえ、食べませんでした。", "3. はい、どうぞ 買ってください。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>When asked about location ('コンビニはありますか'), Option 1 gives the exact location ('あこの角を曲がったところ') -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>ස්ථානයක් විමසන විට ('コンビニはありますか'), 1 වන පිළිතුරෙන් ස්ථානය පැහැදිලි කරයි ('あこの角を曲がったところ') -> 1 වන පිළිතුර."}, {"id": 92, "category": "もんだい4", "category_name": "もんだい4 即時応答", "passage": "M: すみません、この 近くに コンビニは ありますか。", "vocab": [{"word": "曲がる (まがる)", "en": "to turn", "si": "හරවනවා"}], "question": "返事は どれですか。", "options": ["1. はい、あこの 角を 曲がったところに ありますよ。", "2. いいえ、食べませんでした。", "3. はい、どうぞ 買ってください。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>When asked about location ('コンビニはありますか'), Option 1 gives the exact location ('あこの角を曲がったところ') -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>ස්ථානයක් විමසන විට ('コンビニはありますか'), 1 වන පිළිතුරෙන් ස්ථානය පැහැදිලි කරයි ('あこの角を曲がったところ') -> 1 වන පිළිතුර."}, {"id": 93, "category": "もんだい4", "category_name": "もんだい4 即時応答", "passage": "M: すみません、この 近くに コンビニは ありますか。", "vocab": [{"word": "曲がる (まがる)", "en": "to turn", "si": "හරවනවා"}], "question": "返事は どれですか。", "options": ["1. はい、あこの 角を 曲がったところに ありますよ。", "2. いいえ、食べませんでした。", "3. はい、どうぞ 買ってください。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>When asked about location ('コンビニはありますか'), Option 1 gives the exact location ('あこの角を曲がったところ') -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>ස්ථානයක් විමසන විට ('コンビニはありますか'), 1 වන පිළිතුරෙන් ස්ථානය පැහැදිලි කරයි ('あこの角を曲がったところ') -> 1 වන පිළිතුර."}, {"id": 94, "category": "もんだい4", "category_name": "もんだい4 即時応答", "passage": "M: すみません、この 近くに コンビニは ありますか。", "vocab": [{"word": "曲がる (まがる)", "en": "to turn", "si": "හරවනවා"}], "question": "返事は どれですか。", "options": ["1. はい、あこの 角を 曲がったところに ありますよ。", "2. いいえ、食べませんでした。", "3. はい、どうぞ 買ってください。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>When asked about location ('コンビニはありますか'), Option 1 gives the exact location ('あこの角を曲がったところ') -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>ස්ථානයක් විමසන විට ('コンビニはありますか'), 1 වන පිළිතුරෙන් ස්ථානය පැහැදිලි කරයි ('あこの角を曲がったところ') -> 1 වන පිළිතුර."}, {"id": 95, "category": "もんだい4", "category_name": "もんだい4 即時応答", "passage": "M: すみません、この 近くに コンビニは ありますか。", "vocab": [{"word": "曲がる (まがる)", "en": "to turn", "si": "හරවනවා"}], "question": "返事は どれですか。", "options": ["1. はい、あこの 角を 曲がったところに ありますよ。", "2. いいえ、食べませんでした。", "3. はい、どうぞ 買ってください。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>When asked about location ('コンビニはありますか'), Option 1 gives the exact location ('あこの角を曲がったところ') -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>ස්ථානයක් විමසන විට ('コンビニはありますか'), 1 වන පිළිතුරෙන් ස්ථානය පැහැදිලි කරයි ('あこの角を曲がったところ') -> 1 වන පිළිතුර."}, {"id": 96, "category": "もんだい4", "category_name": "もんだい4 即時応答", "passage": "M: すみません、この 近くに コンビニは ありますか。", "vocab": [{"word": "曲がる (まがる)", "en": "to turn", "si": "හරවනවා"}], "question": "返事は どれですか。", "options": ["1. はい、あこの 角を 曲がったところに ありますよ。", "2. いいえ、食べませんでした。", "3. はい、どうぞ 買ってください。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>When asked about location ('コンビニはありますか'), Option 1 gives the exact location ('あこの角を曲がったところ') -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>ස්ථානයක් විමසන විට ('コンビニはありますか'), 1 වන පිළිතුරෙන් ස්ථානය පැහැදිලි කරයි ('あこの角を曲がったところ') -> 1 වන පිළිතුර."}, {"id": 97, "category": "もんだい4", "category_name": "もんだい4 即時応答", "passage": "M: すみません、この 近くに コンビニは ありますか。", "vocab": [{"word": "曲がる (まがる)", "en": "to turn", "si": "හරවනවා"}], "question": "返事は どれですか。", "options": ["1. はい、あこの 角を 曲がったところに ありますよ。", "2. いいえ、食べませんでした。", "3. はい、どうぞ 買ってください。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>When asked about location ('コンビニはありますか'), Option 1 gives the exact location ('あこの角を曲がったところ') -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>ස්ථානයක් විමසන විට ('コンビニはありますか'), 1 වන පිළිතුරෙන් ස්ථානය පැහැදිලි කරයි ('あこの角を曲がったところ') -> 1 වන පිළිතුර."}, {"id": 98, "category": "もんだい4", "category_name": "もんだい4 即時応答", "passage": "M: すみません、この 近くに コンビニは ありますか。", "vocab": [{"word": "曲がる (まがる)", "en": "to turn", "si": "හරවනවා"}], "question": "返事は どれですか。", "options": ["1. はい、あこの 角を 曲がったところに ありますよ。", "2. いいえ、食べませんでした。", "3. はい、どうぞ 買ってください。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>When asked about location ('コンビニはありますか'), Option 1 gives the exact location ('あこの角を曲がったところ') -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>ස්ථානයක් විමසන විට ('コンビニはありますか'), 1 වන පිළිතුරෙන් ස්ථානය පැහැදිලි කරයි ('あこの角を曲がったところ') -> 1 වන පිළිතුර."}, {"id": 99, "category": "もんだい4", "category_name": "もんだい4 即時応答", "passage": "M: すみません、この 近くに コンビニは ありますか。", "vocab": [{"word": "曲がる (まがる)", "en": "to turn", "si": "හරවනවා"}], "question": "返事は どれですか。", "options": ["1. はい、あこの 角を 曲がったところに ありますよ。", "2. いいえ、食べませんでした。", "3. はい、どうぞ 買ってください。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>When asked about location ('コンビニはありますか'), Option 1 gives the exact location ('あこの角を曲がったところ') -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>ස්ථානයක් විමසන විට ('コンビニはありますか'), 1 වන පිළිතුරෙන් ස්ථානය පැහැදිලි කරයි ('あこの角を曲がったところ') -> 1 වන පිළිතුර."}, {"id": 100, "category": "もんだい4", "category_name": "もんだい4 即時応答", "passage": "M: すみません、この 近くに コンビニは ありますか。", "vocab": [{"word": "曲がる (まがる)", "en": "to turn", "si": "හරවනවා"}], "question": "返事は どれですか。", "options": ["1. はい、あこの 角を 曲がったところに ありますよ。", "2. いいえ、食べませんでした。", "3. はい、どうぞ 買ってください。"], "correct": 0, "tip_en": "<strong>👨‍🏫 Prep-School Masterclass:</strong><br>When asked about location ('コンビニはありますか'), Option 1 gives the exact location ('あこの角を曲がったところ') -> Option 1.", "tip_si": "<strong>👨‍🏫 ගුරුවරයාගේ ප්‍රගුණ පන්ති විග්‍රහය:</strong><br>ස්ථානයක් විමසන විට ('コンビニはありますか'), 1 වන පිළිතුරෙන් ස්ථානය පැහැදිලි කරයි ('あこの角を曲がったところ') -> 1 වන පිළිතුර."}];
+    let userAnswers = {};
+    let voices = [];
+
+    function initVoices() {
+        if ('speechSynthesis' in window) {
+            voices = window.speechSynthesis.getVoices();
+        }
+    }
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.onvoiceschanged = initVoices;
+        initVoices();
+    }
+
+    function playHybridAudio(qId, scriptHtml) {
+        let audioPath = 'audio/q' + qId + '.mp3';
+        let localAudio = new Audio(audioPath);
+
+        localAudio.play().then(() => {
+            console.log('Playing MP3 file: ' + audioPath);
+        }).catch(() => {
+            console.log('MP3 not found. Falling back to Dual-Speaker Speech Engine.');
+            playDualSpeakerTTS(scriptHtml);
+        });
+    }
+
+    function playDualSpeakerTTS(scriptHtml) {
+        if (!('speechSynthesis' in window)) {
+            alert('お使いのブラウザは音声読み上げに対応していません。');
+            return;
+        }
+
+        window.speechSynthesis.cancel();
+
+        let cleanText = scriptHtml.replace(/<rt>[^<]*<\/rt>/g, '').replace(/<[^>]*>/g, '');
+        let lines = cleanText.split('<br>');
+        
+        let turns = [];
+        lines.forEach(line => {
+            let trimmed = line.trim();
+            if (trimmed.startsWith('F:')) {
+                turns.push({ speaker: 'F', text: trimmed.replace(/^F:\s*/, '') });
+            } else if (trimmed.startsWith('M:')) {
+                turns.push({ speaker: 'M', text: trimmed.replace(/^M:\s*/, '') });
+            } else if (trimmed.length > 0) {
+                turns.push({ speaker: 'N', text: trimmed });
+            }
+        });
+
+        if (turns.length === 0) {
+            turns.push({ speaker: 'N', text: cleanText });
+        }
+
+        let jpVoices = voices.filter(v => v.lang.includes('ja') || v.lang.includes('JP'));
+        let femaleVoice = jpVoices.find(v => v.name.includes('Google') || v.name.includes('Kyoko') || v.name.includes('Haruka') || v.name.includes('Otoya')) || jpVoices[0];
+        let maleVoice = jpVoices.find(v => v.name.includes('Ichiro') || v.name.includes('Hattori') || v.name.includes('Male')) || femaleVoice;
+
+        turns.forEach((turn) => {
+            let utterance = new SpeechSynthesisUtterance(turn.text);
+            utterance.lang = 'ja-JP';
+            utterance.rate = 0.83;
+
+            if (turn.speaker === 'F') {
+                utterance.pitch = 1.25;
+                if (femaleVoice) utterance.voice = femaleVoice;
+            } else if (turn.speaker === 'M') {
+                utterance.pitch = 0.85;
+                if (maleVoice) utterance.voice = maleVoice;
+            } else {
+                utterance.pitch = 1.0;
+                if (femaleVoice) utterance.voice = femaleVoice;
+            }
+
+            window.speechSynthesis.speak(utterance);
+        });
+    }
+
+    function renderApp() {
+        const jumpContainer = document.getElementById('jump-buttons-container');
+        const qWrapper = document.getElementById('questions-wrapper');
+        
+        jumpContainer.innerHTML = '';
+        qWrapper.innerHTML = '';
+        
+        questionsData.forEach((q) => {
+            const jBtn = document.createElement('div');
+            jBtn.className = 'jump-btn';
+            jBtn.id = 'jump-btn-' + q.id;
+            jBtn.innerText = q.id;
+            jBtn.onclick = () => {
+                document.getElementById('q-card-' + q.id).scrollIntoView({ behavior: 'smooth', block: 'center' });
+            };
+            jumpContainer.appendChild(jBtn);
+            
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = 'q-card-' + q.id;
+            card.setAttribute('data-category', q.category);
+            
+            let vocabHtml = '';
+            if(q.vocab && q.vocab.length > 0) {
+                vocabHtml = `
+                    <div class="vocab-box">
+                        <h5>📚 単語・表現 (Vocabulary & Key Phrases)</h5>
+                        <ul>
+                            ` + q.vocab.map(v => `<li><strong>` + v.word + `</strong>: ` + v.en + ` / ` + v.si + `</li>`).join('') + `
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            let optionsHtml = q.options.map((opt, optIdx) => `
+                <li onclick="selectOption(` + q.id + `, ` + optIdx + `, ` + q.correct + `)">` + opt + `</li>
+            `).join('');
+            
+            card.innerHTML = `
+                <div class="question-header">
+                    <span class="q-badge">Q` + q.id + `</span>
+                    <span class="cat-tag">` + q.category_name + `</span>
+                </div>
+                <div class="audio-player-box">
+                    <span>🔊 聴解男女対話音声 (Dialogue Player)</span>
+                    <button class="play-btn" onclick="playHybridAudio(` + q.id + `, \`${q.passage.replace(/`/g, '\`')}\`)">▶️ 対話音声を再生 (Play)</button>
+                </div>
+                <div class="passage-box">` + q.passage + `</div>
+                ` + vocabHtml + `
+                <div class="q-text">` + q.question + `</div>
+                <ul class="options-list" id="opts-q-` + q.id + `">
+                    ` + optionsHtml + `
+                </ul>
+                <button class="expl-btn" onclick="toggleExpl(` + q.id + `)">💡 講師の超詳細解説 (Prep-School Masterclass)</button>
+                <div class="expl-box" id="expl-box-` + q.id + `">
+                    <div class="lang-tabs">
+                        <button class="tab-btn active" onclick="switchLang(` + q.id + `, 'en')">🇬🇧 English</button>
+                        <button class="tab-btn" onclick="switchLang(` + q.id + `, 'si')">🇱🇰 Sinhala</button>
+                    </div>
+                    <div class="tab-content active" id="expl-en-` + q.id + `">
+                        <div class="tip-card">` + q.tip_en + `</div>
+                    </div>
+                    <div class="tab-content" id="expl-si-` + q.id + `">
+                        <div class="tip-card">` + q.tip_si + `</div>
+                    </div>
+                </div>
+            `;
+            qWrapper.appendChild(card);
+        });
+    }
+
+    function selectOption(qId, selectedIdx, correctIdx) {
+        const optsList = document.getElementById('opts-q-' + qId).children;
+        const jumpBtn = document.getElementById('jump-btn-' + qId);
+        
+        for(let i=0; i<optsList.length; i++) {
+            optsList[i].style.borderColor = '#e2e8f0';
+            optsList[i].style.background = '#ffffff';
+            optsList[i].style.color = '#334155';
+            optsList[i].innerText = optsList[i].innerText.replace(' ❌', '').replace(' ✅', '');
+        }
+        
+        if(selectedIdx === correctIdx) {
+            optsList[selectedIdx].style.borderColor = '#10b981';
+            optsList[selectedIdx].style.background = '#ecfdf5';
+            optsList[selectedIdx].style.color = '#065f46';
+            optsList[selectedIdx].innerText += ' ✅';
+            jumpBtn.className = 'jump-btn correct';
+            userAnswers[qId] = true;
+        } else {
+            optsList[selectedIdx].style.borderColor = '#ef4444';
+            optsList[selectedIdx].style.background = '#fef2f2';
+            optsList[selectedIdx].style.color = '#991b1b';
+            optsList[selectedIdx].innerText += ' ❌';
+            jumpBtn.className = 'jump-btn wrong';
+            userAnswers[qId] = false;
+        }
+        
+        updateScore();
+    }
+
+    function updateScore() {
+        const correctCount = Object.values(userAnswers).filter(v => v === true).length;
+        document.getElementById('score-counter').innerText = '正解数: ' + correctCount + ' / ' + questionsData.length;
+    }
+
+    function toggleExpl(qId) {
+        const box = document.getElementById('expl-box-' + qId);
+        box.classList.toggle('active');
+    }
+
+    function switchLang(qId, lang) {
+        const box = document.getElementById('expl-box-' + qId);
+        box.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        box.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        
+        document.getElementById('expl-' + lang + '-' + qId).classList.add('active');
+        box.querySelector('button[onclick*="' + lang + '"]').classList.add('active');
+    }
+
+    function filterCategory(cat, ev) {
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        if(ev) ev.target.classList.add('active');
+        
+        const cards = document.getElementById('questions-wrapper').querySelectorAll('.question-card');
+        cards.forEach(card => {
+            if(cat === 'all' || card.getAttribute('data-category') === cat) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    renderApp();
+</script>
+
+</body>
+</html>
