@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日本語学習アプリポータル</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f1f5f9; color: #0f172a; padding: 20px; margin: 0; }
+        .container { max-width: 600px; margin: 40px auto; background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); text-align: center; }
+        h1 { font-size: 22px; margin-bottom: 8px; color: #1e293b; }
+        p { color: #64748b; font-size: 14px; margin-bottom: 25px; }
+        .app-list { display: flex; flex-direction: column; gap: 12px; }
+        .app-card { display: block; padding: 16px 20px; background: #4f46e5; color: white; text-decoration: none; border-radius: 12px; font-weight: bold; font-size: 15px; transition: background 0.2s, transform 0.1s; text-align: left; }
+        .app-card:hover { background: #3730a3; transform: translateY(-2px); }
+        .app-card.green { background: #059669; }
+        .app-card.green:hover { background: #047857; }
+        .app-card.orange { background: #d97706; }
+        .app-card.orange:hover { background: #b45309; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🇯🇵 日本語学習アプリポータル</h1>
+        <p>学習したい教材をタップしてください</p>
+        
+        <div class="app-list">
+            <a class="app-card" href="JLPT_N4_Reading_Master.html">📘 JLPT N4 読解 Master (100問)</a>
+            <a class="app-card" href="JLPT_N4_100Q_Master_App.html">📘 JLPT N4 読解 100問 App</a>
+            <a class="app-card" href="JLPT_60Q_Interactive_Master.html">📗 JLPT 読解 Interactive (60問)</a>
+            <a class="app-card" href="JLPT_30Q_Interactive_Master.html">📗 JLPT 読解 Interactive (30問)</a>
+            <a class="app-card green" href="JLPT_N5_Listening_100Q_Master.html">🎧 JLPT N5 聴解 Master (100問)</a>
+            <a class="app-card green" href="JLPT_N5_Listening_100Q_Hybrid_Master.html">🎧 JLPT N5 聴解 Hybrid Master</a>
+            <a class="app-card orange" href="JFT_Basic_vocab_test_site.html">📚 JFT-Basic 単語帳 & 単語テスト</a>
+        </div>
+    </div>
+</body>
+</html>
